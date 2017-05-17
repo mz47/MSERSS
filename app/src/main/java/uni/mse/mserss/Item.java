@@ -92,6 +92,7 @@ public class Item {
             NodeList nodeList = doc.getElementsByTagName("item");
             Element e = (Element) nodeList.item(0);
             Log.i("item.parse.headline", e.getAttribute("title"));
+
         }
         catch (Exception ex) {
             Log.e("item.parse", ex.getMessage());
