@@ -18,7 +18,16 @@ public class DetailActivity extends AppCompatActivity {
         Initialize();
 
         Intent intent = getIntent();
-        tvHeadline.setText("Headline " + intent.getIntExtra("index", -1));
+        String headline = "Headline " + intent.getIntExtra("index", -1);
+        String name = intent.getStringExtra("name");
+        String url = intent.getStringExtra("url");
+
+        Item item = new Item(url, name);
+        //item.Parse();
+
+
+        tvHeadline.setText(headline);
+        tvContent.setText(url);
     }
 
     private void Initialize() {

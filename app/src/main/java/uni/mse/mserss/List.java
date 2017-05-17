@@ -20,7 +20,7 @@ public class List {
     }
 
     public Item Get(int index) {
-        if(index > 0 && items.get(index) != null) {
+        if(index >= 0 && items.get(index) != null) {
             return items.get(index);
         }
         else {
@@ -47,6 +47,17 @@ public class List {
                 urlList.add(i.getUrl());
             }
             return urlList;
+        }
+        return null;
+    }
+
+    public ArrayList ToNameList() {
+        if(items != null && items.size() > 0) {
+            ArrayList<String> nameList = new ArrayList<>();
+            for(Item i : items) {
+                nameList.add(i.getName() + ":" + i.getUrl());
+            }
+            return nameList;
         }
         return null;
     }
