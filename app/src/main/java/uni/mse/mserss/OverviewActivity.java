@@ -16,28 +16,32 @@ public class OverviewActivity extends FragmentActivity {
 
     private ListView lvItems;
     private List items = new List();
+    private ArrayList<String> channels = new ArrayList<>();
+    private DbSource db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
+        db = new DbSource(this);
+        db.open();
+        db.getChannels();
+
         Initialize();
     }
 
     private void Initialize() {
         try {
-            GenerateItems(3);
+            GenerateDummy();
 
             lvItems = (ListView) findViewById(R.id.lvItems);
-            lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.overview_item, items.ToNameList()));
+            lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.overview_item, channels));
             lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent details = new Intent(OverviewActivity.this, DetailActivity.class);
                     details.putExtra("index", position);
-                    details.putExtra("url", items.Get(position).getUrl());
-                    details.putExtra("name", items.Get(position).getName());
                     startActivity(details);
                 }
             });
@@ -48,10 +52,10 @@ public class OverviewActivity extends FragmentActivity {
     }
 
     // Debug Only
-    private void GenerateItems(int n) {
-        for(int i = 0; i < n; i++) {
-            Item item = new Item("https://rss.golem.de/rss.php?feed=RSS2.0", "Golem_rss-" + i);
-            items.Add(item);
-        }
+    private void GenerateDummy() {
+        String url = "https://rss.golem.de/rss.php?feed=RSS2.0";
+        Channel c = new Channel(url);
+        c.parse();
+        channels.add(c.getTitle());
     }
 }

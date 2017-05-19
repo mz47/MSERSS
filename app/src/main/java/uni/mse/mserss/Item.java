@@ -33,9 +33,7 @@ public class Item {
     private String content;
     private Timestamp refreshed;
 
-    public Item(String URL) {
-        this.url = URL;
-        this.name = null;
+    public Item() {
         this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
@@ -83,16 +81,6 @@ public class Item {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public void Parse() {
-        try {
-            ReceiveFeedTask receiver = new ReceiveFeedTask();
-            receiver.execute(url);
-        }
-        catch (Exception ex) {
-            Log.e("item.parse", ex.toString());
-        }
     }
 
 }
