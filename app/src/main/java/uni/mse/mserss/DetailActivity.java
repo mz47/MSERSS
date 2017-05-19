@@ -23,11 +23,11 @@ public class DetailActivity extends AppCompatActivity {
         String url = intent.getStringExtra("url");
 
         Item item = new Item(url, name);
-        //item.Parse();
+        item.Parse();
 
 
         tvHeadline.setText(headline);
-        tvContent.setText(url);
+        tvContent.setText(item.getContent());
     }
 
     private void Initialize() {

@@ -9,12 +9,15 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Calendar;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by marcel on 17.05.17.
@@ -29,7 +32,6 @@ public class Item {
     private String headline;
     private String content;
     private Timestamp refreshed;
-    private XMLReader xmlReader;
 
     public Item(String URL) {
         this.url = URL;
@@ -85,26 +87,12 @@ public class Item {
 
     public void Parse() {
         try {
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new URL(url).openStream());
-            Element root = doc.getDocumentElement();
-            NodeList nodeList = doc.getElementsByTagName("item");
-            Element e = (Element) nodeList.item(0);
-            Log.i("item.parse.headline", e.getAttribute("title"));
-
+            ReceiveFeedTask receiver = new ReceiveFeedTask();
+            receiver.execute(url);
         }
         catch (Exception ex) {
-            Log.e("item.parse", ex.getMessage());
+            Log.e("item.parse", ex.toString());
         }
-    }
-
-    private void GetHeadline() {
-
-    }
-
-    private void GetContent() {
-
     }
 
 }
