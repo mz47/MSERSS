@@ -11,11 +11,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
 
-    private static final String NAME = "sqlite.db";
-    private static final int VERSION = 1;
+    private static final String NAME = "mserss.db";
+    private static final int VERSION = 2;
+    public static final String TABLE = "channel";
+    public static final String COL_ID = "id";
+    public static final String COL_URL = "url";
 
-    private static final String CREATE = "CREATE TABLE channels (id INTEGER PRIMARY KEY AUTOINCREMENT, url TEXT NOT NULL);";
-    private static final String INSERT = "INSERT INTO channels (url) VALUES ('www.google.de');";
+    private static final String CREATE = "CREATE TABLE " + TABLE + " (" + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COL_URL + " TEXT NOT NULL);";
+    private static final String DROP = "DROP TABLE " + TABLE + ";";
+    private static final String INSERT = "INSERT INTO " + TABLE + " (" + COL_URL + ") VALUES ('https://rss.golem.de/rss.php?feed=RSS2.0');";
 
     public DbHelper(Context context) {
         super(context, NAME, null, VERSION);
@@ -23,8 +27,11 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(DROP);
         db.execSQL(CREATE);
-        db.execSQL(INSERT);
+        db.execSQL(INSERT); // Dummy
+        db.execSQL(INSERT); // Dummy
+        db.execSQL(INSERT); // Dummy
     }
 
     @Override

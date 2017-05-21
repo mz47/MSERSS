@@ -23,6 +23,7 @@ public class DbSource {
 
     public void open() {
         database = helper.getWritableDatabase();
+        Log.d("dbsource.open", "Pfad zur Datenbank: " + database.getPath());
     }
 
     public void close() {
@@ -32,10 +33,21 @@ public class DbSource {
     public ArrayList<String> getChannels() {
         ArrayList<String> channels = new ArrayList<>();
 
-        Cursor c = database.rawQuery("SELECT * FROM channels", null);
+        Cursor c = database.rawQuery("SELECT * FROM channel", null);
+        while(c.moveToNext()) {
+            channels.add(c.getString(c.getColumnIndexOrThrow(helper.COL_URL)));
+        }
         c.moveToFirst();
-        Log.d("dbsource.getchannels", c.getString(0));
 
         return channels;
+    }
+
+    public Channel getChannel(int id) {
+        Channel channel = new Channel();
+        Cursor cursor = database.rawQuery("SELECT * FROM " + helper.TABLE + " WHERE " + helper.COL_ID + "=" + id, null);
+        cursor.moveToFirst();
+        channel.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(helper.COL_URL)));
+        channel.parse();
+        return channel;
     }
 }

@@ -18,6 +18,10 @@ public class Channel {
     private Timestamp built;
     private ArrayList<Item> items;
 
+    public Channel() {
+        items = new ArrayList<>();
+    }
+
     public Channel(String URL) {
         setUrl(URL);
     }
@@ -60,6 +64,17 @@ public class Channel {
         }
     }
 
+    public ArrayList<String> getItems() {
+        if(items != null) {
+            ArrayList<String> i = new ArrayList<>();
+            for(Item item : items) {
+                i.add(item.getHeadline());
+            }
+            return i;
+        }
+        return null;
+    }
+
     public void parse() {
         try {
             //ReceiveFeedTask receiver = new ReceiveFeedTask();
@@ -69,8 +84,8 @@ public class Channel {
             setLanguage("DE");
             setBuilt(new Timestamp(Calendar.getInstance().getTime().getTime()));
             addItem(new Item("abc", "name0"));
-            addItem(new Item("abc", "name1"));
-            addItem(new Item("abc", "name2"));
+            addItem(new Item("def", "name1"));
+            addItem(new Item("ghi", "name2"));
         }
         catch (Exception ex) {
             Log.e("channel.parse", ex.toString());

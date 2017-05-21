@@ -4,5 +4,5 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:id="@+id/overview_item_text">
+    android:id="@+id/overview_channel_text">
 </TextView>

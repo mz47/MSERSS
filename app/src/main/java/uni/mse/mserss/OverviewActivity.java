@@ -2,7 +2,6 @@ package uni.mse.mserss;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +15,7 @@ public class OverviewActivity extends FragmentActivity {
 
     private ListView lvItems;
     private List items = new List();
-    private ArrayList<String> channels = new ArrayList<>();
+    private ArrayList<String> channels;
     private DbSource db;
 
     @Override
@@ -26,22 +25,23 @@ public class OverviewActivity extends FragmentActivity {
 
         db = new DbSource(this);
         db.open();
-        db.getChannels();
-
+        channels = db.getChannels();
+        Log.d("overview.oncreate", "length: " + channels.size());
+        db.close();
         Initialize();
     }
 
     private void Initialize() {
         try {
-            GenerateDummy();
+            //GenerateDummy();
 
-            lvItems = (ListView) findViewById(R.id.lvItems);
-            lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.overview_item, channels));
+            lvItems = (ListView) findViewById(R.id.lvChannels);
+            lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.overview_channels_item, channels));
             lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent details = new Intent(OverviewActivity.this, DetailActivity.class);
-                    details.putExtra("index", position);
+                    Intent details = new Intent(OverviewActivity.this, Items.class);
+                    details.putExtra("id", position); //TODO id aus db statt position in arraylist (list -> channellist statt arraylist)
                     startActivity(details);
                 }
             });
