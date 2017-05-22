@@ -17,7 +17,6 @@ public class ItemsActivity extends FragmentActivity {
     private ListView lvItems;
     private DbSource db;
     private Channel channel;
-    //private ArrayList<String> items;
     private ItemList items;
 
     @Override
@@ -28,16 +27,20 @@ public class ItemsActivity extends FragmentActivity {
         Initialize();
 
         if(channel != null) {
-            channel.parse();
             items = channel.getItems();
+
             if(items != null) {
+                Log.d("items.oncreate", "items.titles size: " + items.getTitles().size());
                 lvItems = (ListView) findViewById(R.id.lvItems);
                 lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.items_items_item, items.getTitles()));
                 lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Item i = items.getItem(position);
                         Intent details = new Intent(ItemsActivity.this, DetailActivity.class);
-                        details.putExtra("position", position);
+                        details.putExtra("headline", i.getTitle());
+                        details.putExtra("content", i.getContent());
+                        details.putExtra("url", i.getUrl());
                         startActivity(details);
                     }
                 });
@@ -54,8 +57,7 @@ public class ItemsActivity extends FragmentActivity {
     private void Initialize() {
         db = new DbSource(this);
         db.open();
-        channel = db.getChannel(0);
-        //channel.parse();
+        channel = db.getChannel(1);
         db.close();
     }
 }

@@ -20,12 +20,30 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:text="CONTENT"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btShare"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvHeadline"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Teilen..." />
+
+    <Button
+        android:id="@+id/btOpen"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/tvContent" />
+        android:text="Öffnen" />
+
+    <WebView
+        android:id="@+id/wvContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/btOpen"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tvHeadline" />
 </RelativeLayout>

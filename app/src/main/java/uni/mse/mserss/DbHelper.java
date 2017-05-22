@@ -27,7 +27,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(DROP);
+        //db.execSQL(DROP);
         db.execSQL(CREATE);
         db.execSQL(INSERT); // Dummy
         db.execSQL(INSERT); // Dummy

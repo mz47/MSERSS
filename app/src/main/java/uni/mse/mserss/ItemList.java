@@ -34,8 +34,9 @@ public class ItemList {
         if(items != null) {
             ArrayList<String> titles = new ArrayList<>();
             for(Item i : items) {
-                titles.add(i.getName());
+                titles.add(i.getTitle());
             }
+            return titles;
         }
         return null;
     }

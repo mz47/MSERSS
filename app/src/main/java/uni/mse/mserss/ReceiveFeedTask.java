@@ -1,4 +1,4 @@
-package uni.mse.mserss;
+/*package uni.mse.mserss;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-/**
+/*
  * Created by marcel on 17.05.17.
  * Represents an async Task to parse RSS Feed
  */
 
 /*public class ReceiveFeedTask extends AsyncTask<String, Void, Void> {
 
-    /*private ArrayList<String> items;
+    private ArrayList<String> items;
     private Activity activity;
 
     public ReceiveFeedTask(Activity activity) {
@@ -57,4 +57,5 @@ import javax.xml.parsers.DocumentBuilderFactory;
     @Override
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
-    }*/
+    }
+*/

@@ -55,7 +55,7 @@ public class List {
         if(items != null && items.size() > 0) {
             ArrayList<String> nameList = new ArrayList<>();
             for(Item i : items) {
-                nameList.add(i.getName() + ":" + i.getUrl());
+                nameList.add(i.getTitle() + ":" + i.getUrl());
             }
             return nameList;
         }

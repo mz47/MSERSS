@@ -30,12 +30,14 @@ public class DbSource {
         helper.close();
     }
 
-    public ArrayList<String> getChannels() {
-        ArrayList<String> channels = new ArrayList<>();
+    public ChannelList getChannels() {
+        ChannelList channels = new ChannelList();
 
         Cursor c = database.rawQuery("SELECT * FROM channel", null);
         while(c.moveToNext()) {
-            channels.add(c.getString(c.getColumnIndexOrThrow(helper.COL_URL)));
+            Channel channel = new Channel();
+            channel.setUrl(c.getString(c.getColumnIndexOrThrow(helper.COL_URL)));
+            channels.add(channel);
         }
         c.moveToFirst();
 

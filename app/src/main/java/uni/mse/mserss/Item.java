@@ -28,8 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class Item {
 
     private String url;
-    private String name;
-    private String headline;
+    private String title;
     private String content;
     private Timestamp refreshed;
 
@@ -37,9 +36,14 @@ public class Item {
         this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
-    public Item(String URL, String Name) {
+    public Item(String title) {
+        this.title = title;
+        this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
+    }
+
+    public Item(String URL, String title) {
         this.url = URL;
-        this.name = Name;
+        this.title = title;
         this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
@@ -51,14 +55,6 @@ public class Item {
         this.url = url;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Timestamp getRefreshed() {
         return refreshed;
     }
@@ -67,12 +63,12 @@ public class Item {
         this.refreshed = refreshed;
     }
 
-    public String getHeadline() {
-        return headline;
+    public String getTitle() {
+        return title;
     }
 
-    public void setHeadline(String headline) {
-        this.headline = headline;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {
