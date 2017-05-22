@@ -23,7 +23,7 @@
         <activity android:name=".WebViewActivity" />
         <activity android:name=".EditItemActivity" />
         <activity android:name=".EditListActivity" />
-        <activity android:name=".Items"></activity>
+        <activity android:name=".ItemsActivity"></activity>
     </application>
 
 </manifest>

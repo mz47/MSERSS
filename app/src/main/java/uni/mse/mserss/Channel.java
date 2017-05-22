@@ -8,7 +8,7 @@ import java.util.Calendar;
 
 /**
  * Created by marcel on 19.05.17.
- * Represents a RSS Feed as Collection of RSS Items
+ * Represents a RSS Feed as Collection of RSS ItemsActivity
  */
 
 public class Channel {
@@ -16,10 +16,10 @@ public class Channel {
     private String url;
     private String language;
     private Timestamp built;
-    private ArrayList<Item> items;
+    private ItemList items;
 
     public Channel() {
-        items = new ArrayList<>();
+        items = new ItemList();
     }
 
     public Channel(String URL) {
@@ -60,11 +60,11 @@ public class Channel {
 
     public void addItem(Item item) {
         if(item != null) {
-            this.items.add(item);
+            this.items.addItem(item);
         }
     }
 
-    public ArrayList<String> getItems() {
+    /*public ArrayList<String> getItems() {
         if(items != null) {
             ArrayList<String> i = new ArrayList<>();
             for(Item item : items) {
@@ -73,6 +73,10 @@ public class Channel {
             return i;
         }
         return null;
+    }*/
+
+    public ItemList getItems() {
+        return this.items;
     }
 
     public void parse() {

@@ -2,7 +2,7 @@ package uni.mse.mserss;
 import java.util.ArrayList;
 /**
  * Created by marcel on 17.05.17.
- * Represents a Collection of Items (RSS Feeds)
+ * Represents a Collection of ItemsActivity (RSS Feeds)
  */
 
 public class List {

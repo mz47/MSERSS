@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class OverviewActivity extends FragmentActivity {
 
     private ListView lvItems;
-    private List items = new List();
+    //private List items = new List();
     private ArrayList<String> channels;
     private DbSource db;
 
@@ -40,7 +40,7 @@ public class OverviewActivity extends FragmentActivity {
             lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent details = new Intent(OverviewActivity.this, Items.class);
+                    Intent details = new Intent(OverviewActivity.this, ItemsActivity.class);
                     details.putExtra("id", position); //TODO id aus db statt position in arraylist (list -> channellist statt arraylist)
                     startActivity(details);
                 }
