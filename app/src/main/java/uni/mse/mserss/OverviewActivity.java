@@ -9,32 +9,34 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 public class OverviewActivity extends FragmentActivity {
 
-    private ListView lvItems;
+    private ListView lvChannels;
     private ChannelList channels;
-    private DbSource db;
+    private ListList lists;
+    private DbHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
-        db = new DbSource(this);
-        db.open();
+        db = new DbHelper(this);
         channels = db.getChannels();
-        Log.d("overview.oncreate", "length: " + channels.getChannels().size());
+        lists = db.getLists();
+        Log.d("overview.oncreate", "channels.length: " + channels.getChannels().size());
+        Log.d("overview.oncreate", "lists.length: " + lists.getLists().size());
         db.close();
         Initialize();
     }
 
     private void Initialize() {
         try {
-            lvItems = (ListView) findViewById(R.id.lvChannels);
-            lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.overview_channels_item, channels.getUrls()));
-            lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            lvChannels = (ListView) findViewById(R.id.lvChannels);
+
+            lvChannels.setAdapter(new ArrayAdapter<>(this, R.layout.overview_channels_item, channels.getUrls()));
+
+            lvChannels.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent details = new Intent(OverviewActivity.this, ItemsActivity.class);
@@ -42,6 +44,8 @@ public class OverviewActivity extends FragmentActivity {
                     startActivity(details);
                 }
             });
+
+
         }
         catch (Exception ex) {
             Log.e("Overview.Initialize", ex.getMessage());

@@ -45,7 +45,8 @@ public class ChannelList {
         if(channels != null) {
             ArrayList<String> urls = new ArrayList<>();
             for(Channel c : channels) {
-                urls.add(c.getUrl());
+                //urls.add(c.getUrl());
+                urls.add("(feed) " + c.getUrl());
             }
             return urls;
         }

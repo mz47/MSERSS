@@ -2,7 +2,6 @@ package uni.mse.mserss;
 
 import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,12 +9,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 public class ItemsActivity extends FragmentActivity {
 
     private ListView lvItems;
-    private DbSource db;
+    private DbHelper db;
     private Channel channel;
     private ItemList items;
 
@@ -55,8 +52,7 @@ public class ItemsActivity extends FragmentActivity {
     }
 
     private void Initialize() {
-        db = new DbSource(this);
-        db.open();
+        db = new DbHelper(this);
         channel = db.getChannel(1);
         db.close();
     }
