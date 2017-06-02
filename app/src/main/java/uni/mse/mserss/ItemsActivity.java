@@ -15,11 +15,14 @@ public class ItemsActivity extends FragmentActivity {
     private DbHelper db;
     private Channel channel;
     private ItemList items;
+    private int channelId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
+
+
 
         Initialize();
 
@@ -52,8 +55,11 @@ public class ItemsActivity extends FragmentActivity {
     }
 
     private void Initialize() {
+        Intent i = getIntent();
+        channelId = i.getIntExtra("channelId", -1);
+
         db = new DbHelper(this);
-        channel = db.getChannel(1);
+        channel = db.getChannel(channelId);
         db.close();
     }
 }

@@ -7,13 +7,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class OverviewActivity extends FragmentActivity {
 
-    private ListView lvChannels;
+    private ExpandableListView lvExpandable;
     private ChannelList channels;
-    private ListList lists;
+    private CollectionList lists;
     private DbHelper db;
 
     @Override
@@ -25,27 +31,43 @@ public class OverviewActivity extends FragmentActivity {
         channels = db.getChannels();
         lists = db.getLists();
         Log.d("overview.oncreate", "channels.length: " + channels.getChannels().size());
-        Log.d("overview.oncreate", "lists.length: " + lists.getLists().size());
+        Log.d("overview.oncreate", "lists.length: " + lists.getCollections().size());
         db.close();
+
         Initialize();
     }
 
     private void Initialize() {
         try {
-            lvChannels = (ListView) findViewById(R.id.lvChannels);
+            lvExpandable = (ExpandableListView) findViewById(R.id.lvExpanded);
 
-            lvChannels.setAdapter(new ArrayAdapter<>(this, R.layout.overview_channels_item, channels.getUrls()));
+            List<String> headlines = new ArrayList<>();
+            headlines.add("Collections");
+            headlines.add("Feeds");
 
-            lvChannels.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            HashMap<String, List<String>> list = new HashMap<>();
+            list.put("Collections", lists.getNames());
+            list.put("Feeds", channels.toTitleList());
+
+            ExpandableListAdapter expandableListAdapter = new ExpandableListAdapter(this, headlines, list);
+            lvExpandable.setAdapter(expandableListAdapter);
+            lvExpandable.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent details = new Intent(OverviewActivity.this, ItemsActivity.class);
-                    details.putExtra("id", position);
-                    startActivity(details);
+                public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                    if(groupPosition == 0) {    // Open List
+                        Intent intent = new Intent(OverviewActivity.this, ChannelsActivity.class);
+                        intent.putExtra("listId", 1);
+                        startActivity(intent);
+                    }
+                    if(groupPosition == 1) {    // Open Channel
+                        Channel c = channels.get(childPosition);
+                        Intent intent = new Intent(OverviewActivity.this, ItemsActivity.class);
+                        intent.putExtra("channelId", c.getId());
+                        startActivity(intent);
+                    }
+                    return false;
                 }
             });
-
-
         }
         catch (Exception ex) {
             Log.e("Overview.Initialize", ex.getMessage());

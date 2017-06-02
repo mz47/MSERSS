@@ -5,11 +5,11 @@ import java.util.ArrayList;
  * Represents a Collection of ItemsActivity (RSS Feeds)
  */
 
-public class List {
+public class Collection {
 
     private ArrayList<Item> items;
     private String name;
-
+    private int id;
 
     public String getName() {
         return name;
@@ -19,9 +19,16 @@ public class List {
         this.name = name;
     }
 
-
-    public List() {
+    public Collection() {
         items = new ArrayList<Item>();
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public void Add(Item item) {

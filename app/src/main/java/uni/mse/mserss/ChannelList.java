@@ -30,25 +30,24 @@ public class ChannelList {
         return channels;
     }
 
-    public ArrayList<String> getTitles() {
+    public ArrayList<String> toUrlList() {
+        if(channels != null) {
+            ArrayList<String> urls = new ArrayList<>();
+            for(Channel c : channels) {
+                urls.add(c.getUrl());
+            }
+            return urls;
+        }
+        return null;
+    }
+
+    public ArrayList<String> toTitleList() {
         if(channels != null) {
             ArrayList<String> titles = new ArrayList<>();
             for(Channel c : channels) {
                 titles.add(c.getTitle());
             }
             return titles;
-        }
-        return null;
-    }
-
-    public ArrayList<String> getUrls() {
-        if(channels != null) {
-            ArrayList<String> urls = new ArrayList<>();
-            for(Channel c : channels) {
-                //urls.add(c.getUrl());
-                urls.add("(feed) " + c.getUrl());
-            }
-            return urls;
         }
         return null;
     }

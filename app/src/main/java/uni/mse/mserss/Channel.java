@@ -30,6 +30,7 @@ public class Channel {
     private String language;
     private Timestamp built;
     private ItemList items;
+    private int id;
     public boolean isLoading = false;
 
     public Channel() {
@@ -80,26 +81,26 @@ public class Channel {
 
     public ItemList getItems() {
         parse();
-        //parseAsync();
         return this.items;
     }
 
-    private void parseAsync() {
-        GetRssTask rss = new GetRssTask();
-        rss.execute("");
-        this.items = rss.getItemList();
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     public void parse() {
         try {
-            isLoading = true;
             Thread tParse = new Thread() {
                 @Override
                 public void run() {
                     try {
                         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
                         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-                        Document doc = dBuilder.parse("https://rss.golem.de/rss.php?feed=RSS2.0");
+                        Document doc = dBuilder.parse(getUrl());
                         doc.getDocumentElement().normalize();
                         NodeList nList = doc.getElementsByTagName("item");
 
@@ -114,7 +115,6 @@ public class Channel {
                                 items.addItem(i);
                             }
                         }
-
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
