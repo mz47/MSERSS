@@ -49,6 +49,9 @@ public class OverviewActivity extends FragmentActivity {
             case R.id.menuOverviewAddCollection:
                 startActivity(new Intent(OverviewActivity.this, AddCollectionActivity.class));
                 return true;
+            case R.id.menuOverviewAddFeed:
+                startActivity(new Intent(OverviewActivity.this, AddChannelActivity.class));
+                return true;
             case R.id.menuOverviewEditCollections:
                 startActivity(new Intent(OverviewActivity.this, EditCollectionsActivity.class));
                 return true;

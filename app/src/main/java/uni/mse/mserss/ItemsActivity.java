@@ -22,11 +22,10 @@ public class ItemsActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
 
-
-
         Initialize();
 
         if(channel != null) {
+            getActionBar().setTitle(channel.getTitle());
             items = channel.getItems();
 
             if(items != null) {

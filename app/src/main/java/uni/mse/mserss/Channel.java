@@ -21,7 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by marcel on 19.05.17.
- * Represents a RSS Feed as Collection of RSS ItemsActivity
+ * Represents a RSS Feed as Collection of RSS Items
  */
 
 public class Channel {
@@ -31,6 +31,7 @@ public class Channel {
     private Timestamp built;
     private ItemList items;
     private int id;
+    private Collection collection;
     public boolean isLoading = false;
 
     public Channel() {
@@ -92,6 +93,63 @@ public class Channel {
         return this.id;
     }
 
+    public void setCollection(Collection collection) {
+        if(collection != null) {
+            this.collection = collection;
+        }
+    }
+
+    public Collection getCollection() {
+        return this.collection;
+    }
+
+    public void parseMeta() {
+        try {
+            Thread tParseMeta = new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                        Document doc = dBuilder.parse(getUrl());
+                        doc.getDocumentElement().normalize();
+                        NodeList nList = doc.getElementsByTagName("channel");
+
+                        for (int temp = 0; temp < nList.getLength(); temp++) {
+                            Node nNode = nList.item(temp);
+                            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                                Element eElement = (Element) nNode;
+
+                                setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());
+                                //TODO parse other items (lang, built, descr, ...)
+                            }
+                        }
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                    catch (SAXException ex) {
+                        ex.printStackTrace();
+                    }
+                    catch (ParserConfigurationException ex) {
+                        ex.printStackTrace();
+                    }
+                    catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            };
+
+            //setLanguage("DE");
+            //setBuilt(new Timestamp(Calendar.getInstance().getTime().getTime()));
+            tParseMeta.start();
+            tParseMeta.join();  //TODO qnd
+        }
+        catch (Exception ex) {
+            Log.e("channel.parseMeta", ex.toString());
+        }
+    }
+
     public void parse() {
         try {
             Thread tParse = new Thread() {
@@ -130,12 +188,11 @@ public class Channel {
                     }
                 }
             };
-
-            setTitle("Test Channel 1");
-            setLanguage("DE");
-            setBuilt(new Timestamp(Calendar.getInstance().getTime().getTime()));
+            //TODO get title while parsing
+            //setLanguage("DE");
+            //setBuilt(new Timestamp(Calendar.getInstance().getTime().getTime()));
             tParse.start();
-            tParse.join();
+            tParse.join();  //TODO qnd
         }
         catch (Exception ex) {
             Log.e("channel.parse", ex.toString());

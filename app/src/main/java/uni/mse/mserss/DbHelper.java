@@ -15,19 +15,20 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mserss.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 9;
 
     public static final String TABLE_CHANNEL = "channel";
     public static final String TABLE_LIST = "list";
 
     public static final String CHANNEL_ID = "id";
+    public static final String CHANNEL_LIST_ID = "listid";
     public static final String CHANNEL_URL = "url";
     public static final String CHANNEL_TITLE = "title";
 
     public static final String LIST_ID = "id";
     public static final String LIST_NAME = "name";
 
-    private static final String CREATE_TABLE_CHANNEL = "CREATE TABLE "+ TABLE_CHANNEL +" ("+ CHANNEL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "+ CHANNEL_URL +" TEXT NOT NULL, "+ CHANNEL_TITLE +" TEXT NOT NULL);";
+    private static final String CREATE_TABLE_CHANNEL = "CREATE TABLE "+ TABLE_CHANNEL +" ("+ CHANNEL_ID +" INTEGER PRIMARY KEY AUTOINCREMENT, "+ CHANNEL_LIST_ID +" INTEGER, "+ CHANNEL_URL +" TEXT NOT NULL, "+ CHANNEL_TITLE +" TEXT NOT NULL);";
     private static final String DROP_TABLE_CHANNEL = "DROP TABLE IF EXISTS " + TABLE_CHANNEL + ";";
     private static final String INSERT_CHANNEL_DUMMY1 = "INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES ('https://rss.golem.de/rss.php?tp=games&feed=RSS2.0', 'Golem Games');";
     private static final String INSERT_CHANNEL_DUMMY2 = "INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES ('https://rss.golem.de/rss.php?tp=pol&feed=RSS2.0', 'Golem Politik');";
@@ -65,7 +66,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public ChannelList getChannels() {
         SQLiteDatabase database = this.getWritableDatabase();
         ChannelList channels = new ChannelList();
-        Cursor c = database.rawQuery("SELECT * FROM channel", null);
+        Cursor c = database.rawQuery("SELECT * FROM channel WHERE listid IS NULL", null);
         while(c.moveToNext()) {
             Channel channel = new Channel();
             channel.setId(c.getInt(c.getColumnIndexOrThrow(CHANNEL_ID)));
@@ -81,10 +82,12 @@ public class DbHelper extends SQLiteOpenHelper {
     public ChannelList getChannels(int listId) {
         SQLiteDatabase database = this.getWritableDatabase();
         ChannelList channels = new ChannelList();
-        Cursor c = database.rawQuery("SELECT * FROM channel", null);
+        Cursor c = database.rawQuery("SELECT * FROM channel WHERE listid = " + listId, null);
         while(c.moveToNext()) {
             Channel channel = new Channel();
+            channel.setId(c.getInt(c.getColumnIndexOrThrow(CHANNEL_ID)));
             channel.setUrl(c.getString(c.getColumnIndexOrThrow(CHANNEL_URL)));
+            channel.setTitle(c.getString(c.getColumnIndexOrThrow(CHANNEL_TITLE)));
             channels.add(channel);
         }
         c.moveToFirst();
@@ -123,6 +126,16 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         else {
             Log.d("DbHelper.addCollection", "c empty");
+        }
+    }
+
+    public void addChannel(Channel c) {
+        if(c != null) {
+            SQLiteDatabase database = this.getWritableDatabase();
+            database.execSQL("INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_LIST_ID +", "+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES ("+ c.getCollection().getId() +", '"+ c.getUrl() +"', '"+ c.getTitle() +"');");
+        }
+        else {
+            Log.d("DbHelper.addChannel", "c empty");
         }
     }
 }

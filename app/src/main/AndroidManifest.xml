@@ -23,7 +23,8 @@
         <activity android:name=".ChannelsActivity" />
         <activity android:name=".EditCollectionsActivity" />
         <activity android:name=".EditChannelsActivity" />
-        <activity android:name=".AddCollectionActivity"></activity>
+        <activity android:name=".AddCollectionActivity" />
+        <activity android:name=".AddChannelActivity"></activity>
     </application>
 
 </manifest>
