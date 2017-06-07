@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by marcel on 19.05.17.
@@ -113,5 +114,15 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         c.moveToFirst();
         return lists;
+    }
+
+    public void addCollection(Collection c) {
+        if(c != null) {
+            SQLiteDatabase database = this.getWritableDatabase();
+            database.execSQL("INSERT INTO "+ TABLE_LIST +" ("+ LIST_NAME +") VALUES ('"+ c.getName() +"')");
+        }
+        else {
+            Log.d("DbHelper.addCollection", "c empty");
+        }
     }
 }

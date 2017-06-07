@@ -4,12 +4,11 @@ import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ExpandableListView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +34,35 @@ public class OverviewActivity extends FragmentActivity {
         db.close();
 
         Initialize();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_overview, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menuOverviewAddCollection:
+                startActivity(new Intent(OverviewActivity.this, AddCollectionActivity.class));
+                return true;
+            case R.id.menuOverviewEditCollections:
+                startActivity(new Intent(OverviewActivity.this, EditCollectionsActivity.class));
+                return true;
+            case R.id.menuOverviewEditFeeds:
+                startActivity(new Intent(OverviewActivity.this, EditChannelsActivity.class));
+                return true;
+            case R.id.menuOverviewSettings:
+                startActivity(new Intent(OverviewActivity.this, SettingsActivity.class));
+                return true;
+            case R.id.menuOverviewAbout:
+                startActivity(new Intent(OverviewActivity.this, AboutActivity.class));
+                return true;
+            default: return super.onOptionsItemSelected(item);
+        }
     }
 
     private void Initialize() {

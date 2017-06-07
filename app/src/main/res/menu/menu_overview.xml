@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menuOverviewAddCollection"
+        android:title="Add Collection" />
+    <item android:id="@+id/menuOverviewEditCollections"
+        android:title="Edit Collections" />
+    <item android:id="@+id/menuOverviewEditFeeds"
+        android:title="Edit Feeds" />
+    <item android:id="@+id/menuOverviewSettings"
+        android:title="Settings" />
+    <item android:id="@+id/menuOverviewAbout"
+        android:title="About" />
+</menu>

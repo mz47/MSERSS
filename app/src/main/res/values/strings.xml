@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MSERSS</string>
+    <string name="aboutText">
+        Simple RSS Reader for Course Software Engineering for Mobile Systems (MSE) at University Duisburg-Essen\n\n
+        Author: Marcel Prehn\n
+        Version: 1.0.0\n
+        Date: 2017-06-07
+    </string>
 </resources>

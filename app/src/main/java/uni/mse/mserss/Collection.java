@@ -16,11 +16,16 @@ public class Collection {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name;   //TODO ?!
     }
 
     public Collection() {
         items = new ArrayList<Item>();
+    }
+
+    public Collection(String name) {
+        items = new ArrayList<>();  //TODO ?!
+        this.name = name;
     }
 
     public void setId(int id) {
