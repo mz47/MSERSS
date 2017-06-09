@@ -101,7 +101,7 @@ public class DbHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         channel.setId(id);
         channel.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(CHANNEL_URL)));
-        channel.parse();
+        channel.getItems();
         return channel;
     }
 
@@ -118,6 +118,7 @@ public class DbHelper extends SQLiteOpenHelper {
         c.moveToFirst();
         return lists;
     }
+
 
     public void addCollection(Collection c) {
         if(c != null) {

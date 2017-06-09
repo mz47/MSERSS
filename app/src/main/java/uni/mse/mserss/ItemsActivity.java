@@ -40,6 +40,8 @@ public class ItemsActivity extends FragmentActivity {
                         details.putExtra("headline", i.getTitle());
                         details.putExtra("content", i.getContent());
                         details.putExtra("url", i.getUrl());
+                        details.putExtra("channelId", channelId);
+                        details.putExtra("itemId", position);
                         startActivity(details);
                     }
                 });

@@ -27,6 +27,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class Item {
 
+    private int id;
     private String url;
     private String title;
     private String content;
@@ -45,6 +46,14 @@ public class Item {
         this.url = URL;
         this.title = title;
         this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getUrl() {

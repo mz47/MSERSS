@@ -32,7 +32,6 @@ public class Channel {
     private ItemList items;
     private int id;
     private Collection collection;
-    public boolean isLoading = false;
 
     public Channel() {
         items = new ItemList();
@@ -150,8 +149,10 @@ public class Channel {
         }
     }
 
-    public void parse() {
+    private void parse() {
         try {
+            parseMeta();
+
             Thread tParse = new Thread() {
                 @Override
                 public void run() {
@@ -198,4 +199,5 @@ public class Channel {
             Log.e("channel.parse", ex.toString());
         }
     }
+
 }
