@@ -28,6 +28,12 @@ public class Collection {
         this.name = name;
     }
 
+    public Collection(String name, int id) {
+        items = new ArrayList<>();  //TODO ?!
+        this.name = name;
+        this.id = id;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

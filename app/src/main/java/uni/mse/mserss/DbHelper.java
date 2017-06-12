@@ -15,7 +15,7 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "mserss.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 10;
 
     public static final String TABLE_CHANNEL = "channel";
     public static final String TABLE_LIST = "list";
@@ -63,10 +63,11 @@ public class DbHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    // Get Channels without linked Colletion
     public ChannelList getChannels() {
         SQLiteDatabase database = this.getWritableDatabase();
         ChannelList channels = new ChannelList();
-        Cursor c = database.rawQuery("SELECT * FROM channel WHERE listid IS NULL", null);
+        Cursor c = database.rawQuery("SELECT * FROM "+ TABLE_CHANNEL +" WHERE "+ CHANNEL_LIST_ID +" IS NULL", null);
         while(c.moveToNext()) {
             Channel channel = new Channel();
             channel.setId(c.getInt(c.getColumnIndexOrThrow(CHANNEL_ID)));
@@ -78,11 +79,11 @@ public class DbHelper extends SQLiteOpenHelper {
         return channels;
     }
 
-    //TODO get channel list by list id
+    // Get Channels by Collection ID
     public ChannelList getChannels(int listId) {
         SQLiteDatabase database = this.getWritableDatabase();
         ChannelList channels = new ChannelList();
-        Cursor c = database.rawQuery("SELECT * FROM channel WHERE listid = " + listId, null);
+        Cursor c = database.rawQuery("SELECT * FROM "+ TABLE_CHANNEL +" WHERE "+ CHANNEL_LIST_ID +" = " + listId, null);
         while(c.moveToNext()) {
             Channel channel = new Channel();
             channel.setId(c.getInt(c.getColumnIndexOrThrow(CHANNEL_ID)));
@@ -133,7 +134,13 @@ public class DbHelper extends SQLiteOpenHelper {
     public void addChannel(Channel c) {
         if(c != null) {
             SQLiteDatabase database = this.getWritableDatabase();
-            database.execSQL("INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_LIST_ID +", "+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES ("+ c.getCollection().getId() +", '"+ c.getUrl() +"', '"+ c.getTitle() +"');");
+            if(c.getCollection().getId() != -1) {   // Link with Collection
+                database.execSQL("INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_LIST_ID +", "+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES ("+ c.getCollection().getId() +", '"+ c.getUrl() +"', '"+ c.getTitle() +"');");
+
+            }
+            else {  // Channel without Collection
+                database.execSQL("INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_LIST_ID +", "+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES (NULL, '"+ c.getUrl() +"', '"+ c.getTitle() +"');");
+            }
         }
         else {
             Log.d("DbHelper.addChannel", "c empty");

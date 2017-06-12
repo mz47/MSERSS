@@ -58,41 +58,16 @@ public class AddChannelActivity extends Activity {
         btAddChanel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    String url = txChannelUrl.getText().toString().trim();
-                    Channel channel = new Channel(url);
-                    channel.setCollection(selectedCollection);
-                    channel.parseMeta();
-                    db.addChannel(channel);
-                    startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));
-                }
-                catch (Exception ex) {
-                    Log.e("AddChannel", ex.toString());
-                }
-                finally {
-                    db.close();
-                }
+                addChannel();
             }
         });
-
         ddCollections.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    if(collections != null) {
-                        selectedCollection = collections.get(position);
-                        Log.d("AddChannel", "selectedCollection: " + selectedCollection.getName());
-                    }
-                }
-                catch (Exception ex) {
-                    Log.e("AddChannel", ex.toString());
-                }
+                selectChannel(position);
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+            public void onNothingSelected(AdapterView<?> parent) { }
         });
     }
 
@@ -100,12 +75,44 @@ public class AddChannelActivity extends Activity {
         try {
             if(db != null) {
                 collections = db.getLists();
-                //Log.d("AddChannel.fillSpinner", "collections.length:" + collections.getNames().size());
+                collections.add(new Collection("(none)", -1));
                 ddCollections.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, collections.getNames()));
+                ddCollections.setSelection(collections.getSize() - 1);
+                //selectedCollection = collections.get(collections.getSize() - 1);
             }
         }
         catch (Exception ex) {
-            Log.e("addChannel.fillSpinner", ex.toString());
+            Log.e("fillSpinner", ex.toString());
+        }
+    }
+
+    private void selectChannel(int position) {
+        try {
+            if(collections != null) {
+                selectedCollection = collections.get(position);
+                Log.d("AddChannel", "selectedCollection: " + selectedCollection.getName());
+            }
+        }
+        catch (Exception ex) {
+            Log.e("selectChannel", ex.toString());
+        }
+    }
+
+    private void addChannel() {
+        try {
+            String url = txChannelUrl.getText().toString().trim();
+            Channel channel = new Channel(url);
+            channel.setCollection(selectedCollection);
+            channel.parseMeta();
+            db.addChannel(channel);
+
+            startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));
+        }
+        catch (Exception ex) {
+            Log.e("addChannel", ex.toString());
+        }
+        finally {
+            db.close();
         }
     }
 }

@@ -27,6 +27,8 @@ public class ChannelsActivity extends Activity {
     private void Initialize() {
         Intent intent = getIntent();
         int id = intent.getIntExtra("listId", 0);
+        String name = intent.getStringExtra("listName");
+        getActionBar().setTitle(name);
         db = new DbHelper(this);
         channels = db.getChannels(id);
         db.close();

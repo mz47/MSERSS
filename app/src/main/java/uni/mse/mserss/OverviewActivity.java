@@ -87,7 +87,8 @@ public class OverviewActivity extends FragmentActivity {
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                     if(groupPosition == 0) {    // Open List
                         Intent intent = new Intent(OverviewActivity.this, ChannelsActivity.class);
-                        intent.putExtra("listId", 1);
+                        intent.putExtra("listId", lists.get(childPosition).getId());
+                        intent.putExtra("listName", lists.get(childPosition).getName());
                         startActivity(intent);
                     }
                     if(groupPosition == 1) {    // Open Channel

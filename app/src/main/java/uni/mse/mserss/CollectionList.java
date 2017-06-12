@@ -40,4 +40,11 @@ public class CollectionList {
         }
         return null;
     }
+
+    public int getSize() {
+        if(collections != null) {
+            return collections.size();
+        }
+        return -1;
+    }
 }
