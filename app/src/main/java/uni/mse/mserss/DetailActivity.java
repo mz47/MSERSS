@@ -7,11 +7,13 @@ import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DetailActivity extends Activity {
 
@@ -59,20 +61,6 @@ public class DetailActivity extends Activity {
         });
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        int action = MotionEventCompat.getActionMasked(event);
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                Next();
-                return true;
-            case MotionEvent.ACTION_UP:
-                Previous();
-                return true;
-            default: return super.onTouchEvent(event);
-        }
-    }
-
     private void Initialize() {
         tvHeadline = (TextView) findViewById(R.id.tvHeadline);
         wvContent = (WebView) findViewById(R.id.wvContent);
@@ -90,6 +78,18 @@ public class DetailActivity extends Activity {
         items = channel.getItems();
         item = items.getItem(itemId);
         item.setId(itemId);
+
+        wvContent.setOnTouchListener(new SwipeListener(getApplicationContext()) {
+            @Override
+            public void onSwipeLeft() {
+                Next();
+            }
+            @Override
+            public void onSwipeRight() {
+                Previous();
+            }
+        });
+
     }
 
     private void ShowItem() {
@@ -128,6 +128,7 @@ public class DetailActivity extends Activity {
                     this.item = previous;
                     item.setId(id - 1);
                     ShowItem();
+                    Toast.makeText(getApplicationContext(), "Previous...", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     btPrevious.setEnabled(false);
@@ -155,6 +156,7 @@ public class DetailActivity extends Activity {
                     this.item = next;
                     item.setId(id + 1);
                     ShowItem();
+                    Toast.makeText(getApplicationContext(), "Next...", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     Log.d("DetailActivity.Previous", "next element null");
