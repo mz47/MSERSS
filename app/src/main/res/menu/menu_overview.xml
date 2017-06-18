@@ -4,10 +4,6 @@
         android:title="Add Collection" />
     <item android:id="@+id/menuOverviewAddFeed"
         android:title="Add Feed" />
-    <item android:id="@+id/menuOverviewEditCollections"
-        android:title="Edit Collections" />
-    <item android:id="@+id/menuOverviewEditFeeds"
-        android:title="Edit Feeds" />
     <item android:id="@+id/menuOverviewSettings"
         android:title="Settings" />
     <item android:id="@+id/menuOverviewAbout"

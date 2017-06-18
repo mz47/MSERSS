@@ -3,6 +3,7 @@ package uni.mse.mserss;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
@@ -144,6 +145,22 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         else {
             Log.d("DbHelper.addChannel", "c empty");
+        }
+    }
+
+    public void removeCollection(int id) {
+        try {
+            if(id >= 0) {
+                SQLiteDatabase database = this.getWritableDatabase();
+                database.execSQL("DELETE FROM "+ TABLE_LIST +" WHERE id = " + id);
+                Log.d("removeCollection", "removed collection with id " + id);
+            }
+        }
+        catch (SQLiteException ex) {
+            Log.e("removeCollection", ex.toString());
+        }
+        catch (Exception ex) {
+            Log.e("removeCollection", ex.toString());
         }
     }
 }
