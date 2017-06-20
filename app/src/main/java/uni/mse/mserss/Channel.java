@@ -27,11 +27,12 @@ import javax.xml.parsers.ParserConfigurationException;
 public class Channel {
     private String title;
     private String url;
-    private String language;
-    private Timestamp built;
     private ItemList items;
     private int id;
     private Collection collection;
+    private String type;
+    private boolean refresh;
+    private String signature;
 
     public Channel() {
         items = new ItemList();
@@ -39,6 +40,18 @@ public class Channel {
 
     public Channel(String URL) {
         setUrl(URL);
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public boolean isRefresh() {
+        return refresh;
+    }
+
+    public void setRefresh(boolean refresh) {
+        this.refresh = refresh;
     }
 
     public String getTitle() {
@@ -57,22 +70,6 @@ public class Channel {
         this.url = url;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
-
-    public Timestamp getBuilt() {
-        return built;
-    }
-
-    public void setBuilt(Timestamp built) {
-        this.built = built;
-    }
-
     public void addItem(Item item) {
         if(item != null) {
             this.items.addItem(item);
@@ -80,7 +77,6 @@ public class Channel {
     }
 
     public ItemList getItems() {
-        parse();
         return this.items;
     }
 
@@ -102,6 +98,14 @@ public class Channel {
         return this.collection;
     }
 
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return this.type;
+    }
+
     public void parseMeta() {
         try {
             Thread tParseMeta = new Thread() {
@@ -114,14 +118,21 @@ public class Channel {
                         doc.getDocumentElement().normalize();
                         NodeList nList = doc.getElementsByTagName("channel");
 
-                        for (int temp = 0; temp < nList.getLength(); temp++) {
-                            Node nNode = nList.item(temp);
-                            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                                Element eElement = (Element) nNode;
+                        if (nList != null && nList.getLength() > 0) {    // Parse RSS Feed
+                            for (int i = 0; i < nList.getLength(); i++) {
+                                Node nNode = nList.item(i);
+                                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                                    Element eElement = (Element) nNode;
 
-                                setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());
-                                //TODO parse other items (lang, built, descr, ...)
+                                    setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());
+                                    setType("RSS");
+                                    //TODO parse other items (lang, built, descr, ...)
+                                }
                             }
+
+                        }
+                        else {  // No RSS Feed available
+                            setType("nonRSS");
                         }
                     }
                     catch (IOException ex) {
@@ -138,9 +149,6 @@ public class Channel {
                     }
                 }
             };
-
-            //setLanguage("DE");
-            //setBuilt(new Timestamp(Calendar.getInstance().getTime().getTime()));
             tParseMeta.start();
             tParseMeta.join();  //TODO qnd
         }
@@ -149,7 +157,7 @@ public class Channel {
         }
     }
 
-    private void parse() {
+    public void parse() {
         try {
             parseMeta();
 
@@ -174,6 +182,7 @@ public class Channel {
                                 items.addItem(i);
                             }
                         }
+                        signature = items.getItem(items.getSize() - 1).getTitle();  //TODO generate hash
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -190,8 +199,6 @@ public class Channel {
                 }
             };
             //TODO get title while parsing
-            //setLanguage("DE");
-            //setBuilt(new Timestamp(Calendar.getInstance().getTime().getTime()));
             tParse.start();
             tParse.join();  //TODO qnd
         }
@@ -200,4 +207,10 @@ public class Channel {
         }
     }
 
+    public Item getLastItem() {
+        if(items != null && items.getSize() > -1) {
+            return items.getItem(items.getSize() - 1);
+        }
+        return null;
+    }
 }

@@ -96,6 +96,23 @@ public class DbHelper extends SQLiteOpenHelper {
         return channels;
     }
 
+    // Get all Channels
+    public ChannelList getAllChannels() {
+        SQLiteDatabase database = this.getWritableDatabase();
+        ChannelList channels = new ChannelList();
+        Cursor c = database.rawQuery("SELECT * FROM "+ TABLE_CHANNEL +";", null);
+        while(c.moveToNext()) {
+            Channel channel = new Channel();
+            channel.setId(c.getInt(c.getColumnIndexOrThrow(CHANNEL_ID)));
+            channel.setUrl(c.getString(c.getColumnIndexOrThrow(CHANNEL_URL)));
+            channel.setTitle(c.getString(c.getColumnIndexOrThrow(CHANNEL_TITLE)));
+            channel.setRefresh(true);   //TODO DEBUG
+            channels.add(channel);
+        }
+        c.moveToFirst();
+        return channels;
+    }
+
     public Channel getChannel(int id) {
         SQLiteDatabase database = this.getWritableDatabase();
         Channel channel = new Channel();
@@ -152,8 +169,8 @@ public class DbHelper extends SQLiteOpenHelper {
         try {
             if(id >= 0) {
                 SQLiteDatabase database = this.getWritableDatabase();
-                database.execSQL("DELETE FROM "+ TABLE_LIST +" WHERE id = " + id);
-                Log.d("removeCollection", "removed collection with id " + id);
+                database.execSQL("DELETE FROM "+ TABLE_LIST +" WHERE id = " + id + ";");
+                Log.d("removeCollection", "removed collection with id " + id + ";");
             }
         }
         catch (SQLiteException ex) {
@@ -161,6 +178,29 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         catch (Exception ex) {
             Log.e("removeCollection", ex.toString());
+        }
+    }
+
+    public void updateCollectionName(int id, String name) {
+        if(id >= 0 && name != null && name.equals("") == false) {
+            SQLiteDatabase database = this.getWritableDatabase();
+            database.execSQL("UPDATE " + TABLE_LIST + " SET " + LIST_NAME + " = '"+ name +"' WHERE "+ LIST_ID +" = " + id + ";");
+        }
+    }
+
+    public void removeChannel(int id) {
+        try {
+            if(id >= 0) {
+                SQLiteDatabase database = this.getWritableDatabase();
+                database.execSQL("DELETE FROM "+ TABLE_CHANNEL +" WHERE id = " + id + ";");
+                Log.d("removeChannel", "removed channel with id " + id + ";");
+            }
+        }
+        catch (SQLiteException ex) {
+            Log.e("removeChannel", ex.toString());
+        }
+        catch (Exception ex) {
+            Log.e("removeChannel", ex.toString());
         }
     }
 }

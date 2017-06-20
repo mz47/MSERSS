@@ -40,4 +40,11 @@ public class ItemList {
         }
         return null;
     }
+
+    public int getSize() {
+        if (items != null) {
+            return items.size();
+        }
+        return -1;
+    }
 }

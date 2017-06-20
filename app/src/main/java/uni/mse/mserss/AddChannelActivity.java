@@ -1,6 +1,8 @@
 package uni.mse.mserss;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -78,7 +80,6 @@ public class AddChannelActivity extends Activity {
                 collections.add(new Collection("(none)", -1));
                 ddCollections.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, collections.getNames()));
                 ddCollections.setSelection(collections.getSize() - 1);
-                //selectedCollection = collections.get(collections.getSize() - 1);
             }
         }
         catch (Exception ex) {
@@ -102,11 +103,15 @@ public class AddChannelActivity extends Activity {
         try {
             String url = txChannelUrl.getText().toString().trim();
             Channel channel = new Channel(url);
-            channel.setCollection(selectedCollection);
             channel.parseMeta();
-            db.addChannel(channel);
-
-            startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));
+            if(channel.getType().equals("RSS")) {
+                channel.setCollection(selectedCollection);
+                db.addChannel(channel);
+                startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));
+            }
+            else {
+                ShowInvalidTypeDialog();
+            }
         }
         catch (Exception ex) {
             Log.e("addChannel", ex.toString());
@@ -114,5 +119,18 @@ public class AddChannelActivity extends Activity {
         finally {
             db.close();
         }
+    }
+
+    private void ShowInvalidTypeDialog() {
+        AlertDialog dialog = new AlertDialog.Builder(this).create();
+        dialog.setTitle("Invalid Type");
+        dialog.setMessage("The entered URL does not refer to a valid RSS feed.");
+        dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 }

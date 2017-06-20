@@ -6,7 +6,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/rss_icon"
         android:label="@string/app_name">
         <activity android:name=".OverviewActivity">
             <intent-filter>
@@ -26,6 +26,10 @@
         <activity android:name=".EditChannelsActivity" />
         <activity android:name=".AddCollectionActivity" />
         <activity android:name=".AddChannelActivity"></activity>
+
+        <service android:name=".RssService"
+            android:exported="false"/>
+        <receiver android:name=".RssServiceReceiver" />
     </application>
 
 </manifest>

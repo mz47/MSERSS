@@ -90,4 +90,8 @@ public class Collection {
         }
         return null;
     }
+
+    public ArrayList getChannels() {
+        return new ArrayList<Channel>();   //TODO
+    }
 }

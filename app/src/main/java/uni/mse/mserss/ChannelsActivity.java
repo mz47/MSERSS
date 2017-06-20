@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 
 public class ChannelsActivity extends Activity {
@@ -21,6 +23,7 @@ public class ChannelsActivity extends Activity {
     private DbHelper db;
     private ChannelList channels;
     private int id;
+    private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class ChannelsActivity extends Activity {
     private void Initialize() {
         Intent intent = getIntent();
         id = intent.getIntExtra("listId", 0);
-        String name = intent.getStringExtra("listName");
+        name = intent.getStringExtra("listName");
 
         getActionBar().setTitle(name);
 
@@ -87,17 +90,33 @@ public class ChannelsActivity extends Activity {
         dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        EditCollection();
-                        ReturnToOverview();
+                        dialog.dismiss();
                     }
                 });
         dialog.show();
     }
 
     private void ShowEditDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(this).create();
-        dialog.setTitle("Edit");
-        //dialog
+        AlertDialog dialog = new AlertDialog.Builder(ChannelsActivity.this).create();
+        final EditText txName = new EditText(this);
+        txName.setInputType(InputType.TYPE_CLASS_TEXT);
+        txName.setText(name);
+        dialog.setView(txName);
+        dialog.setTitle("Edit Collection Name");
+        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                EditCollection(txName.getText().toString());
+                ReturnToOverview();
+            }
+        });
+        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void RemoveCollection() {
@@ -106,8 +125,10 @@ public class ChannelsActivity extends Activity {
         }
     }
 
-    private void EditCollection() {
-
+    private void EditCollection(String name) {
+        if(db != null && id >= 0 && name != null && name.equals("") == false) {
+            db.updateCollectionName(id, name);
+        }
     }
 
     private void ReturnToOverview() {
