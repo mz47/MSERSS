@@ -104,7 +104,7 @@ public class AddChannelActivity extends Activity {
             String url = txChannelUrl.getText().toString().trim();
             Channel channel = new Channel(url);
             channel.parseMeta();
-            if(channel.getType().equals("RSS")) {
+            if(channel.getType().equals(Channel.TYPE_RSS)) {
                 channel.setCollection(selectedCollection);
                 db.addChannel(channel);
                 startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));

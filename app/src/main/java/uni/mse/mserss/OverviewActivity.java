@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,7 @@ import java.util.TimeZone;
 public class OverviewActivity extends FragmentActivity {
 
     private ExpandableListView lvExpandable;
+    private ChannelList allChannels;
     private ChannelList channels;
     private CollectionList collections;
     private DbHelper db;
@@ -41,6 +43,7 @@ public class OverviewActivity extends FragmentActivity {
         Log.d("overview.oncreate", "lists.length: " + collections.getCollections().size());
         db.close();
 
+        ParseAll();
         Initialize();
         InitializeService();
     }
@@ -117,6 +120,14 @@ public class OverviewActivity extends FragmentActivity {
         }
     }
 
+    private void ParseChannels() {
+        if(channels != null) {
+            for(Channel c : channels.getChannels()) {
+                c.parseMeta();
+            }
+        }
+    }
+
     private void Refresh() {
         RefreshChannels();
         //RefreshCollections();
@@ -180,36 +191,36 @@ public class OverviewActivity extends FragmentActivity {
     }
 
     private void InitializeService() {
-        Calendar time = Calendar.getInstance();
-        time.setTimeZone(TimeZone.getDefault());
-        time.set(Calendar.HOUR_OF_DAY, 12);
-        time.set(Calendar.MINUTE, 30);
 
         Intent refreshIntent = new Intent(this, RssServiceReceiver.class);
-        refreshIntent.putExtra("signature", GenerateSignature());
+        refreshIntent.putExtra("signature", sig());
         refreshIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, refreshIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, time.getTimeInMillis(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
 
-        Log.d("alarm", "Set to: " + time.getTime().toString());
     }
 
-    private int GenerateSignature() {
-        ChannelList allChannels = db.getAllChannels();
+    private void ParseAll() {
+        allChannels = db.getAllChannels();
         db.close();
 
         if(allChannels != null) {
-            String signature = "";
             for(Channel c : allChannels.getChannels()) {
                 c.parse();
-                signature += c.getSignature();
             }
-            Log.d("GenerateSignature", "Generated Signature as String: " + signature);
-            return signature.hashCode();
         }
-        return -1;
+
+        sig();
+    }
+
+    private String sig() {
+        String sig = "";
+        for(Channel c : allChannels.getChannels()) {
+            sig += c.getSignature();
+        }
+        return sig;
     }
 }

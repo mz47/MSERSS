@@ -6,7 +6,9 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.os.ResultReceiver;
 import android.util.Log;
 
 /**
@@ -15,44 +17,40 @@ import android.util.Log;
 
 public class RssService extends IntentService {
     public RssService() {
-        super("MSERSS.RssService");
+        super(RssService.class.getName());
     }
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        //TODO fetch all channel data
-        boolean isUpToDate = true;
-        int signature = intent.getIntExtra("signature", -3);
 
-        Log.d("rssService", "signature: " + signature);
+        Log.d("RssService", "service started");
 
         DbHelper db = new DbHelper(this);
         ChannelList channels = db.getAllChannels();
+        db.close();
+
+        String sig = intent.getStringExtra("signature");
+        String newSig = "";
 
         for(Channel c : channels.getChannels()) {
             if(c.isRefresh()) {
                 c.parse();
+                newSig += c.getSignature();
             }
         }
 
-        if(!isUpToDate) {
+        if(newSig.equals(sig) == false) {
             sendNotification();
+            //newSig = sig;
         }
     }
 
     private void sendNotification() {
-        Intent notificationIntent = new Intent(this, OverviewActivity.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-
         NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification.Builder notification =  new Notification.Builder(this);
         notification.setSmallIcon(R.drawable.rss_icon);
         notification.setContentTitle("MSERSS");
-        notification.setContentText("All Feeds updated");
-
+        notification.setContentText("New Items available!");
         notificationManager.notify(1, notification.build());
-
-
-
     }
 }

@@ -1,5 +1,8 @@
 package uni.mse.mserss;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 
 /**
@@ -7,6 +10,7 @@ import java.util.ArrayList;
  */
 
 public class ChannelList {
+
     private ArrayList<Channel> channels;
 
     public ChannelList() {

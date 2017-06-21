@@ -10,8 +10,10 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Handler;
 import java.util.logging.LogRecord;
 
@@ -33,6 +35,10 @@ public class Channel {
     private String type;
     private boolean refresh;
     private String signature;
+    private Date datetime;
+
+    public static final String TYPE_RSS = "RSS";
+    public static final String TYPE_NONRSS = "NONRSS";
 
     public Channel() {
         items = new ItemList();
@@ -80,6 +86,14 @@ public class Channel {
         return this.items;
     }
 
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    public void setDatetime(Date datetime) {
+        this.datetime = datetime;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -124,15 +138,14 @@ public class Channel {
                                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                                     Element eElement = (Element) nNode;
 
-                                    setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());
-                                    setType("RSS");
-                                    //TODO parse other items (lang, built, descr, ...)
+                                    title = eElement.getElementsByTagName("title").item(0).getTextContent();
+                                    type = Channel.TYPE_RSS;
                                 }
                             }
 
                         }
                         else {  // No RSS Feed available
-                            setType("nonRSS");
+                            type = Channel.TYPE_NONRSS;
                         }
                     }
                     catch (IOException ex) {
@@ -182,7 +195,7 @@ public class Channel {
                                 items.addItem(i);
                             }
                         }
-                        signature = items.getItem(items.getSize() - 1).getTitle();  //TODO generate hash
+                        signature = items.getItem(0).getTitle();  //TODO generate hash
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -212,5 +225,16 @@ public class Channel {
             return items.getItem(items.getSize() - 1);
         }
         return null;
+    }
+
+    private Date FormatDate(String s) {
+        try {
+            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            return date.parse(s);
+        }
+        catch (Exception ex) {
+            Log.e("FormatDate", ex.toString());
+            return null;
+        }
     }
 }
