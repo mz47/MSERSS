@@ -25,9 +25,10 @@ import java.util.TimeZone;
 public class OverviewActivity extends FragmentActivity {
 
     private ExpandableListView lvExpandable;
-    private ChannelList allChannels;
+    //private ChannelList allChannels;
     private ChannelList channels;
-    private CollectionList collections;
+    private ItemList items;
+    //private CollectionList collections;
     private DbHelper db;
 
     @Override
@@ -37,13 +38,10 @@ public class OverviewActivity extends FragmentActivity {
 
         db = new DbHelper(this);
         channels = db.getChannels();
-        collections = db.getLists();
-
-        Log.d("overview.oncreate", "channels.length: " + channels.getChannels().size());
-        Log.d("overview.oncreate", "lists.length: " + collections.getCollections().size());
         db.close();
 
         ParseAll();
+        appendItems();
         Initialize();
         InitializeService();
     }
@@ -61,9 +59,6 @@ public class OverviewActivity extends FragmentActivity {
             case R.id.menuOverviewRefresh:
                 //TODO refresh all data3
                 Refresh();
-                return true;
-            case R.id.menuOverviewAddCollection:
-                startActivity(new Intent(OverviewActivity.this, AddCollectionActivity.class));
                 return true;
             case R.id.menuOverviewAddFeed:
                 startActivity(new Intent(OverviewActivity.this, AddChannelActivity.class));
@@ -83,33 +78,43 @@ public class OverviewActivity extends FragmentActivity {
             lvExpandable = (ExpandableListView) findViewById(R.id.lvExpanded);
 
             List<String> headlines = new ArrayList<>();
-            headlines.add("Collections");
-            headlines.add("Feeds");
+            headlines.add("Channels");
+            headlines.add("Items");
 
             HashMap<String, List<String>> list = new HashMap<>();
-            list.put("Collections", collections.getNames());
-            list.put("Feeds", channels.toTitleList());
+            //list.put("Channels", collections.getNames());
+            list.put("Channels", channels.toTitleList());
+            list.put("Items", items.toTitleList());
 
             ExpandableListAdapter expandableListAdapter = new ExpandableListAdapter(this, headlines, list);
             lvExpandable.setAdapter(expandableListAdapter);
             lvExpandable.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
                 @Override
                 public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                    if(groupPosition == 0) {    // Open List
-                        //Intent intent = new Intent(OverviewActivity.this, ChannelsActivity.class);
-                        //intent.putExtra("listId", collections.get(childPosition).getId());
-                        //intent.putExtra("listName", collections.get(childPosition).getName());
-                        //startActivity(intent);
-                    }
-                    if(groupPosition == 1) {    // Open Channel
+                    if(groupPosition == 0) {    // Open Channel
                         Channel c = channels.get(childPosition);
                         Intent intent = new Intent(OverviewActivity.this, ItemsActivity.class);
                         intent.putExtra("channelId", c.getId());
                         //Intent intent = new Intent(OverviewActivity.this, RssService.class);
                         //intent.putExtra("channelId", c.getId());
                         //intent.setData(Uri.parse(c.getUrl()));
-                        //startActivity(intent);
-                        startService(intent);
+                        startActivity(intent);
+                        //startService(intent);
+                    }
+                    if(groupPosition == 1) {    // Open Item
+                        Item item = items.getItem(childPosition);
+                        //Channel c = channels.get(childPosition);
+                        Intent intent = new Intent(OverviewActivity.this, DetailActivity.class);
+                        //intent.putExtra("headline", item.getTitle());
+                        //intent.putExtra("content", item.getContent());
+                        //intent.putExtra("url", item.getUrl());
+                        intent.putExtra("channelId", item.getChannelId());
+                        intent.putExtra("itemId", childPosition);
+                        //Intent intent = new Intent(OverviewActivity.this, RssService.class);
+                        //intent.putExtra("channelId", c.getId());
+                        //intent.setData(Uri.parse(c.getUrl()));
+                        startActivity(intent);
+                        //startService(intent);
                     }
                     return false;
                 }
@@ -120,20 +125,7 @@ public class OverviewActivity extends FragmentActivity {
         }
     }
 
-    private void ParseChannels() {
-        if(channels != null) {
-            for(Channel c : channels.getChannels()) {
-                c.parseMeta();
-            }
-        }
-    }
-
     private void Refresh() {
-        RefreshChannels();
-        //RefreshCollections();
-    }
-
-    private void RefreshChannels() {
         try {
             Thread tRefreshChannels = new Thread() {
                 @Override
@@ -147,33 +139,6 @@ public class OverviewActivity extends FragmentActivity {
                             }
                             else {
                                 Log.e("refresh", "no new items");
-                            }
-                        }
-                    }
-                    catch (Exception ex) {
-                        Log.e("refresh thread", ex.toString());
-                    }
-                }
-            };
-            tRefreshChannels.start();
-            tRefreshChannels.join();
-        }
-        catch (Exception ex) {
-            Log.e("refresh", ex.toString());
-        }
-    }
-
-    private void RefreshCollections() {
-        try {
-            Thread tRefreshChannels = new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        if (channels != null) {  // Refreshing all Feeds
-                            for(Collection collection : collections.getCollections()) {
-                                /*for (Channel c : collection.getChannels()) {
-                                    c.parse();
-                                }*/
                             }
                         }
                     }
@@ -204,23 +169,29 @@ public class OverviewActivity extends FragmentActivity {
     }
 
     private void ParseAll() {
-        allChannels = db.getAllChannels();
-        db.close();
-
-        if(allChannels != null) {
-            for(Channel c : allChannels.getChannels()) {
+        if(channels != null) {
+            for(Channel c : channels.getChannels()) {
                 c.parse();
             }
         }
-
         sig();
     }
 
     private String sig() {
         String sig = "";
-        for(Channel c : allChannels.getChannels()) {
+        for(Channel c : channels.getChannels()) {
             sig += c.getSignature();
         }
         return sig;
+    }
+
+    private void appendItems() {
+        items = new ItemList();
+        for(Channel c : channels.getChannels()) {
+            for(int i = 0; i < c.getItems().getSize(); i++) {
+                items.addItem(c.getItems().getItem(i));
+            }
+        }
+        Log.d("overview", "appended items count: " + items.getSize());
     }
 }

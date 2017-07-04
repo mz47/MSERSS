@@ -30,7 +30,7 @@ public class ItemList {
         return items;
     }
 
-    public ArrayList<String> getTitles() {
+    public ArrayList<String> toTitleList() {
         if(items != null) {
             ArrayList<String> titles = new ArrayList<>();
             for(Item i : items) {

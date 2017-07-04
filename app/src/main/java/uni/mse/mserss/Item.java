@@ -28,6 +28,7 @@ import javax.xml.parsers.ParserConfigurationException;
 public class Item {
 
     private int id;
+    private int channelId;
     private String url;
     private String title;
     private String content;
@@ -54,6 +55,14 @@ public class Item {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getChannelId() {
+        return this.channelId;
+    }
+
+    public void setChannelId(int id) {
+        this.channelId = id;
     }
 
     public String getUrl() {

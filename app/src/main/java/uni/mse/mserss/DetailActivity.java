@@ -75,6 +75,7 @@ public class DetailActivity extends Activity {
 
         db = new DbHelper(this);
         Channel channel = db.getChannel(channelId);
+        channel.parse();
         items = channel.getItems();
         item = items.getItem(itemId);
         item.setId(itemId);

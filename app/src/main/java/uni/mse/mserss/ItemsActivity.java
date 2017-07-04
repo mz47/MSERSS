@@ -34,12 +34,8 @@ public class ItemsActivity extends FragmentActivity {
 
         //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, statusFilter);
 
-
         Initialize();
         FillListView();
-
-
-
     }
 
     @Override
@@ -65,8 +61,8 @@ public class ItemsActivity extends FragmentActivity {
 
         db = new DbHelper(this);
         channel = db.getChannel(channelId);
-        channel.parse();
         db.close();
+        channel.parse();
     }
 
     private void FillListView() {
@@ -75,18 +71,17 @@ public class ItemsActivity extends FragmentActivity {
             items = channel.getItems();
 
             if(items != null) {
-                Log.d("items.oncreate", "items.titles size: " + items.getTitles().size());
                 lvItems = (ListView) findViewById(R.id.lvItems);
-                lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.items_items_item, items.getTitles()));
+                lvItems.setAdapter(new ArrayAdapter<>(this, R.layout.items_items_item, items.toTitleList()));
                 lvItems.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Item i = items.getItem(position);
                         Intent details = new Intent(ItemsActivity.this, DetailActivity.class);
-                        details.putExtra("headline", i.getTitle());
-                        details.putExtra("content", i.getContent());
-                        details.putExtra("url", i.getUrl());
-                        details.putExtra("channelId", channelId);
+                        //details.putExtra("headline", i.getTitle());
+                        //details.putExtra("content", i.getContent());
+                        //details.putExtra("url", i.getUrl());
+                        details.putExtra("channelId", i.getChannelId());
                         details.putExtra("itemId", position);
                         startActivity(details);
                     }

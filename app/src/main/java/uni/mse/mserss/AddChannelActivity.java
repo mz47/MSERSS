@@ -19,10 +19,10 @@ public class AddChannelActivity extends Activity {
 
     private EditText txChannelUrl;
     private Button btAddChanel;
-    private Spinner ddCollections;
+    //private Spinner ddCollections;
     private DbHelper db;
-    private CollectionList collections;
-    private Collection selectedCollection;
+    //private CollectionList collections;
+    //private Collection selectedCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +33,11 @@ public class AddChannelActivity extends Activity {
         txChannelUrl = (EditText) findViewById(R.id.txChannelUrl);
         btAddChanel = (Button) findViewById(R.id.btAddChannel);
         btAddChanel.setEnabled(false);
-        ddCollections = (Spinner) findViewById(R.id.ddCollections);
+        //ddCollections = (Spinner) findViewById(R.id.ddCollections);
 
         db = new DbHelper(this);
 
-        fillSpinner();
+        //fillSpinner();
 
         txChannelUrl.addTextChangedListener(new TextWatcher() {
             @Override
@@ -63,17 +63,17 @@ public class AddChannelActivity extends Activity {
                 addChannel();
             }
         });
-        ddCollections.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*ddCollections.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectChannel(position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) { }
-        });
+        });*/
     }
 
-    private void fillSpinner() {
+    /*private void fillSpinner() {
         try {
             if(db != null) {
                 collections = db.getLists();
@@ -85,9 +85,9 @@ public class AddChannelActivity extends Activity {
         catch (Exception ex) {
             Log.e("fillSpinner", ex.toString());
         }
-    }
+    }*/
 
-    private void selectChannel(int position) {
+    /*private void selectChannel(int position) {
         try {
             if(collections != null) {
                 selectedCollection = collections.get(position);
@@ -97,7 +97,7 @@ public class AddChannelActivity extends Activity {
         catch (Exception ex) {
             Log.e("selectChannel", ex.toString());
         }
-    }
+    }*/
 
     private void addChannel() {
         try {
@@ -105,7 +105,7 @@ public class AddChannelActivity extends Activity {
             Channel channel = new Channel(url);
             channel.parseMeta();
             if(channel.getType().equals(Channel.TYPE_RSS)) {
-                channel.setCollection(selectedCollection);
+                //channel.setCollection(selectedCollection);
                 db.addChannel(channel);
                 startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));
             }

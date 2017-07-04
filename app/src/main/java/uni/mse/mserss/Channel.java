@@ -132,6 +132,7 @@ public class Channel {
                         doc.getDocumentElement().normalize();
                         NodeList nList = doc.getElementsByTagName("channel");
 
+
                         if (nList != null && nList.getLength() > 0) {    // Parse RSS Feed
                             for (int i = 0; i < nList.getLength(); i++) {
                                 Node nNode = nList.item(i);
@@ -172,6 +173,7 @@ public class Channel {
 
     public void parse() {
         try {
+            final int channelId = this.id;
             parseMeta();
 
             Thread tParse = new Thread() {
@@ -192,6 +194,7 @@ public class Channel {
                                 i.setTitle(eElement.getElementsByTagName("title").item(0).getTextContent());
                                 i.setContent(eElement.getElementsByTagName("description").item(0).getTextContent());
                                 i.setUrl(eElement.getElementsByTagName("link").item(0).getTextContent());
+                                i.setChannelId(channelId);
                                 items.addItem(i);
                             }
                         }

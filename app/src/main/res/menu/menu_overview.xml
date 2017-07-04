@@ -2,10 +2,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menuOverviewRefresh"
         android:title="Refresh" />
-    <item android:id="@+id/menuOverviewAddCollection"
-        android:title="Add Collection" />
     <item android:id="@+id/menuOverviewAddFeed"
-        android:title="Add Feed" />
+        android:title="Add Channel" />
     <item android:id="@+id/menuOverviewSettings"
         android:title="Settings" />
     <item android:id="@+id/menuOverviewAbout"

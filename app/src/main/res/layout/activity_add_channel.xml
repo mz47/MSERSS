@@ -6,17 +6,7 @@
     tools:context="uni.mse.mserss.AddChannelActivity">
 
     <TextView
-        android:id="@+id/tvCollection"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/txChannelUrl"
-        android:padding="20dp"
-        android:text="Collection:" />
-
-    <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvChannelUrl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="20dp"
@@ -27,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Channel"
-        android:layout_below="@+id/ddCollections"
+        android:layout_below="@+id/txChannelUrl"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -37,15 +27,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="text"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Spinner
-        android:id="@+id/ddCollections"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCollection"
+        android:layout_below="@+id/tvChannelUrl"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

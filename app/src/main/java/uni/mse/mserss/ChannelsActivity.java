@@ -43,10 +43,10 @@ public class ChannelsActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuCollectionEdit:
-                ShowEditDialog();
+                //ShowEditDialog();
                 return true;
             case R.id.menuCollectionRemove:
-                ShowRemoveDialog();
+                //ShowRemoveDialog();
                 return true;
             default: return super.onOptionsItemSelected(item);
         }
@@ -60,7 +60,7 @@ public class ChannelsActivity extends Activity {
         getActionBar().setTitle(name);
 
         db = new DbHelper(this);
-        channels = db.getChannels(id);
+        channels = db.getChannels();
         db.close();
 
         lvChannels = (ListView) findViewById(R.id.lvChannels);
@@ -76,7 +76,7 @@ public class ChannelsActivity extends Activity {
         });
     }
 
-    private void ShowRemoveDialog() {
+    /*private void ShowRemoveDialog() {
         AlertDialog dialog = new AlertDialog.Builder(ChannelsActivity.this).create();
         dialog.setTitle("Removing Collection");
         dialog.setMessage("Are you sure?");
@@ -94,9 +94,9 @@ public class ChannelsActivity extends Activity {
                     }
                 });
         dialog.show();
-    }
+    }*/
 
-    private void ShowEditDialog() {
+    /*private void ShowEditDialog() {
         AlertDialog dialog = new AlertDialog.Builder(ChannelsActivity.this).create();
         final EditText txName = new EditText(this);
         txName.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -117,19 +117,19 @@ public class ChannelsActivity extends Activity {
             }
         });
         dialog.show();
-    }
+    }*/
 
-    private void RemoveCollection() {
+    /*private void RemoveCollection() {
         if(db != null && id >= 0) {
             db.removeCollection(id);
         }
-    }
+    }*/
 
-    private void EditCollection(String name) {
+    /*private void EditCollection(String name) {
         if(db != null && id >= 0 && name != null && name.equals("") == false) {
             db.updateCollectionName(id, name);
         }
-    }
+    }*/
 
     private void ReturnToOverview() {
         startActivity(new Intent(ChannelsActivity.this, OverviewActivity.class));

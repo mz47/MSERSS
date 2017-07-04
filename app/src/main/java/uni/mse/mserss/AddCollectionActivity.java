@@ -56,8 +56,8 @@ public class AddCollectionActivity extends Activity {
             @Override
             public void onClick(View v) {
                 try {
-                    String title = txCollectionTitle.getText().toString().trim();   // Get title, trim
-                    db.addCollection(new Collection(title));    // Create new Collection, add to Database
+                    //String title = txCollectionTitle.getText().toString().trim();   // Get title, trim
+                    //db.addCollection(new Collection(title));    // Create new Collection, add to Database
                     startActivity(new Intent(AddCollectionActivity.this, OverviewActivity.class));  // Return to Overview Activity
                 }
                 catch (Exception ex) {
