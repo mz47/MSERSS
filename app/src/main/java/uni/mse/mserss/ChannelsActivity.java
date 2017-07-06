@@ -32,26 +32,6 @@ public class ChannelsActivity extends Activity {
         Initialize();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_collection, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menuCollectionEdit:
-                //ShowEditDialog();
-                return true;
-            case R.id.menuCollectionRemove:
-                //ShowRemoveDialog();
-                return true;
-            default: return super.onOptionsItemSelected(item);
-        }
-    }
-
     private void Initialize() {
         Intent intent = getIntent();
         id = intent.getIntExtra("listId", 0);
@@ -75,61 +55,6 @@ public class ChannelsActivity extends Activity {
             }
         });
     }
-
-    /*private void ShowRemoveDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(ChannelsActivity.this).create();
-        dialog.setTitle("Removing Collection");
-        dialog.setMessage("Are you sure?");
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "YES",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        RemoveCollection();
-                        ReturnToOverview();
-                    }
-                });
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "NO",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        dialog.show();
-    }*/
-
-    /*private void ShowEditDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(ChannelsActivity.this).create();
-        final EditText txName = new EditText(this);
-        txName.setInputType(InputType.TYPE_CLASS_TEXT);
-        txName.setText(name);
-        dialog.setView(txName);
-        dialog.setTitle("Edit Collection Name");
-        dialog.setButton(AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditCollection(txName.getText().toString());
-                ReturnToOverview();
-            }
-        });
-        dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }*/
-
-    /*private void RemoveCollection() {
-        if(db != null && id >= 0) {
-            db.removeCollection(id);
-        }
-    }*/
-
-    /*private void EditCollection(String name) {
-        if(db != null && id >= 0 && name != null && name.equals("") == false) {
-            db.updateCollectionName(id, name);
-        }
-    }*/
 
     private void ReturnToOverview() {
         startActivity(new Intent(ChannelsActivity.this, OverviewActivity.class));

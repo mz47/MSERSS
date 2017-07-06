@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -19,10 +20,8 @@ public class AddChannelActivity extends Activity {
 
     private EditText txChannelUrl;
     private Button btAddChanel;
-    //private Spinner ddCollections;
+    private CheckBox cbRefresh;
     private DbHelper db;
-    //private CollectionList collections;
-    //private Collection selectedCollection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +31,10 @@ public class AddChannelActivity extends Activity {
 
         txChannelUrl = (EditText) findViewById(R.id.txChannelUrl);
         btAddChanel = (Button) findViewById(R.id.btAddChannel);
+        cbRefresh = (CheckBox) findViewById(R.id.cbRefresh);
         btAddChanel.setEnabled(false);
-        //ddCollections = (Spinner) findViewById(R.id.ddCollections);
-
+        cbRefresh.setChecked(true);
         db = new DbHelper(this);
-
-        //fillSpinner();
 
         txChannelUrl.addTextChangedListener(new TextWatcher() {
             @Override
@@ -63,49 +60,20 @@ public class AddChannelActivity extends Activity {
                 addChannel();
             }
         });
-        /*ddCollections.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectChannel(position);
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });*/
     }
-
-    /*private void fillSpinner() {
-        try {
-            if(db != null) {
-                collections = db.getLists();
-                collections.add(new Collection("(none)", -1));
-                ddCollections.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, collections.getNames()));
-                ddCollections.setSelection(collections.getSize() - 1);
-            }
-        }
-        catch (Exception ex) {
-            Log.e("fillSpinner", ex.toString());
-        }
-    }*/
-
-    /*private void selectChannel(int position) {
-        try {
-            if(collections != null) {
-                selectedCollection = collections.get(position);
-                Log.d("AddChannel", "selectedCollection: " + selectedCollection.getName());
-            }
-        }
-        catch (Exception ex) {
-            Log.e("selectChannel", ex.toString());
-        }
-    }*/
 
     private void addChannel() {
         try {
             String url = txChannelUrl.getText().toString().trim();
             Channel channel = new Channel(url);
+            if(cbRefresh.isChecked()) {
+                channel.setRefresh(1);
+            }
+            else {
+                channel.setRefresh(0);
+            }
             channel.parseMeta();
             if(channel.getType().equals(Channel.TYPE_RSS)) {
-                //channel.setCollection(selectedCollection);
                 db.addChannel(channel);
                 startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));
             }

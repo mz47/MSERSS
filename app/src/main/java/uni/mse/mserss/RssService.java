@@ -26,22 +26,26 @@ public class RssService extends IntentService {
         Log.d("RssService", "service started");
 
         DbHelper db = new DbHelper(this);
-        ChannelList channels = db.getAllChannels();
+        ChannelList channels = db.getChannels();
         db.close();
 
-        String sig = intent.getStringExtra("signature");
-        String newSig = "";
+        String lastSignature = intent.getStringExtra("signature");
+        String currentSignature = "";
 
         for(Channel c : channels.getChannels()) {
-            if(c.isRefresh()) {
+            //if(c.getRefresh() == 1) {
                 c.parse();
-                newSig += c.getSignature();
-            }
+                currentSignature += c.getSignature();
+            //}
         }
 
-        if(newSig.equals(sig) == false) {
+        //sendNotification();
+        Log.d("rssservice", "last signature: " + lastSignature);
+        Log.d("rssservice", "current signature: " + currentSignature);
+
+        if(currentSignature.equals(lastSignature) == false) {
             sendNotification();
-            //newSig = sig;
+            lastSignature = currentSignature;
         }
     }
 

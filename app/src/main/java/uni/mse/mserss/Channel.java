@@ -31,11 +31,9 @@ public class Channel {
     private String url;
     private ItemList items;
     private int id;
-    private Collection collection;
     private String type;
-    private boolean refresh;
+    private int refresh;
     private String signature;
-    private Date datetime;
 
     public static final String TYPE_RSS = "RSS";
     public static final String TYPE_NONRSS = "NONRSS";
@@ -52,11 +50,11 @@ public class Channel {
         return signature;
     }
 
-    public boolean isRefresh() {
+    public int getRefresh() {
         return refresh;
     }
 
-    public void setRefresh(boolean refresh) {
+    public void setRefresh(int refresh) {
         this.refresh = refresh;
     }
 
@@ -86,30 +84,12 @@ public class Channel {
         return this.items;
     }
 
-    public Date getDatetime() {
-        return datetime;
-    }
-
-    public void setDatetime(Date datetime) {
-        this.datetime = datetime;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
     public int getId() {
         return this.id;
-    }
-
-    public void setCollection(Collection collection) {
-        if(collection != null) {
-            this.collection = collection;
-        }
-    }
-
-    public Collection getCollection() {
-        return this.collection;
     }
 
     public void setType(String type) {
@@ -143,7 +123,6 @@ public class Channel {
                                     type = Channel.TYPE_RSS;
                                 }
                             }
-
                         }
                         else {  // No RSS Feed available
                             type = Channel.TYPE_NONRSS;
@@ -198,7 +177,7 @@ public class Channel {
                                 items.addItem(i);
                             }
                         }
-                        signature = items.getItem(0).getTitle();  //TODO generate hash
+                        signature = items.getItem(0).getTitle().hashCode() + "";
                     }
                     catch (IOException ex) {
                         ex.printStackTrace();
@@ -228,16 +207,5 @@ public class Channel {
             return items.getItem(items.getSize() - 1);
         }
         return null;
-    }
-
-    private Date FormatDate(String s) {
-        try {
-            SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            return date.parse(s);
-        }
-        catch (Exception ex) {
-            Log.e("FormatDate", ex.toString());
-            return null;
-        }
     }
 }

@@ -25,10 +25,8 @@ import java.util.TimeZone;
 public class OverviewActivity extends FragmentActivity {
 
     private ExpandableListView lvExpandable;
-    //private ChannelList allChannels;
     private ChannelList channels;
     private ItemList items;
-    //private CollectionList collections;
     private DbHelper db;
 
     @Override
@@ -156,15 +154,14 @@ public class OverviewActivity extends FragmentActivity {
     }
 
     private void InitializeService() {
-
         Intent refreshIntent = new Intent(this, RssServiceReceiver.class);
-        refreshIntent.putExtra("signature", sig());
+        refreshIntent.putExtra("signature", generateSignature());
         refreshIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, refreshIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);   //TODO intervall acc to settings
 
     }
 
@@ -174,14 +171,17 @@ public class OverviewActivity extends FragmentActivity {
                 c.parse();
             }
         }
-        sig();
+        generateSignature();
     }
 
-    private String sig() {
+    private String generateSignature() {
         String sig = "";
         for(Channel c : channels.getChannels()) {
-            sig += c.getSignature();
+            //if(c.getRefresh() == 1) {
+                sig += c.getSignature();
+            //}
         }
+        Log.d("overview", "initial signature: " + sig);
         return sig;
     }
 

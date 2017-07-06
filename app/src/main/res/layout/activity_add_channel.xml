@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Add Channel"
-        android:layout_below="@+id/txChannelUrl"
+        android:layout_below="@+id/cbRefresh"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -30,5 +30,14 @@
         android:layout_below="@+id/tvChannelUrl"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <CheckBox
+        android:id="@+id/cbRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/txChannelUrl"
+        android:text="Refresh automatically?" />
 
 </RelativeLayout>
