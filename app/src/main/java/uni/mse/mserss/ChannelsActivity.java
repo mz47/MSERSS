@@ -55,8 +55,4 @@ public class ChannelsActivity extends Activity {
             }
         });
     }
-
-    private void ReturnToOverview() {
-        startActivity(new Intent(ChannelsActivity.this, OverviewActivity.class));
-    }
 }

@@ -33,13 +33,12 @@ public class RssService extends IntentService {
         String currentSignature = "";
 
         for(Channel c : channels.getChannels()) {
-            //if(c.getRefresh() == 1) {
+            if(c.getRefresh() == 1) {
                 c.parse();
                 currentSignature += c.getSignature();
-            //}
+            }
         }
 
-        //sendNotification();
         Log.d("rssservice", "last signature: " + lastSignature);
         Log.d("rssservice", "current signature: " + currentSignature);
 

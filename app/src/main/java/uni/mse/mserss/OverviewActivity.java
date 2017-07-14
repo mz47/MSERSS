@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.support.v4.app.FragmentActivity;
@@ -55,7 +56,6 @@ public class OverviewActivity extends FragmentActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menuOverviewRefresh:
-                //TODO refresh all data3
                 Refresh();
                 return true;
             case R.id.menuOverviewAddFeed:
@@ -80,7 +80,6 @@ public class OverviewActivity extends FragmentActivity {
             headlines.add("Items");
 
             HashMap<String, List<String>> list = new HashMap<>();
-            //list.put("Channels", collections.getNames());
             list.put("Channels", channels.toTitleList());
             list.put("Items", items.toTitleList());
 
@@ -93,26 +92,14 @@ public class OverviewActivity extends FragmentActivity {
                         Channel c = channels.get(childPosition);
                         Intent intent = new Intent(OverviewActivity.this, ItemsActivity.class);
                         intent.putExtra("channelId", c.getId());
-                        //Intent intent = new Intent(OverviewActivity.this, RssService.class);
-                        //intent.putExtra("channelId", c.getId());
-                        //intent.setData(Uri.parse(c.getUrl()));
                         startActivity(intent);
-                        //startService(intent);
                     }
                     if(groupPosition == 1) {    // Open Item
                         Item item = items.getItem(childPosition);
-                        //Channel c = channels.get(childPosition);
                         Intent intent = new Intent(OverviewActivity.this, DetailActivity.class);
-                        //intent.putExtra("headline", item.getTitle());
-                        //intent.putExtra("content", item.getContent());
-                        //intent.putExtra("url", item.getUrl());
                         intent.putExtra("channelId", item.getChannelId());
                         intent.putExtra("itemId", childPosition);
-                        //Intent intent = new Intent(OverviewActivity.this, RssService.class);
-                        //intent.putExtra("channelId", c.getId());
-                        //intent.setData(Uri.parse(c.getUrl()));
                         startActivity(intent);
-                        //startService(intent);
                     }
                     return false;
                 }
@@ -161,7 +148,7 @@ public class OverviewActivity extends FragmentActivity {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, refreshIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 
         AlarmManager alarm = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarm.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), AlarmManager.INTERVAL_FIFTEEN_MINUTES, pendingIntent);   //TODO intervall acc to settings
+        alarm.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), getSavedInterval(), pendingIntent);
 
     }
 
@@ -177,9 +164,9 @@ public class OverviewActivity extends FragmentActivity {
     private String generateSignature() {
         String sig = "";
         for(Channel c : channels.getChannels()) {
-            //if(c.getRefresh() == 1) {
+            if(c.getRefresh() == 1) {
                 sig += c.getSignature();
-            //}
+            }
         }
         Log.d("overview", "initial signature: " + sig);
         return sig;
@@ -193,5 +180,18 @@ public class OverviewActivity extends FragmentActivity {
             }
         }
         Log.d("overview", "appended items count: " + items.getSize());
+    }
+
+    private long getSavedInterval() {
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("uni.mse.mserss.INTERVAL", getApplicationContext().MODE_PRIVATE);
+        int index = preferences.getInt("interval", 0);
+        switch (index) {
+            case 0: return AlarmManager.INTERVAL_FIFTEEN_MINUTES;
+            case 1: return AlarmManager.INTERVAL_HALF_HOUR;
+            case 2: return AlarmManager.INTERVAL_HOUR;
+            case 3: return AlarmManager.INTERVAL_HALF_DAY;
+            case 4: return AlarmManager.INTERVAL_DAY;
+        }
+        return AlarmManager.INTERVAL_DAY;
     }
 }

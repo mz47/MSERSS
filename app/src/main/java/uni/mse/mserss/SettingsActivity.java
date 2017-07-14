@@ -32,7 +32,8 @@ public class SettingsActivity extends Activity {
         interval.add("15 minutes");
         interval.add("30 minutes");
         interval.add("60 minutes");
-        interval.add("120 minutes");
+        interval.add("12 hours");
+        interval.add("24 hours");
 
         spinnerSettings.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, interval));
         spinnerSettings.setSelection(0);

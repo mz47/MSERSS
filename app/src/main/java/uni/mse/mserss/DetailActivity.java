@@ -60,7 +60,7 @@ public class DetailActivity extends Activity {
             }
         });
     }
-
+    // Initialize Activity and Controls
     private void Initialize() {
         tvHeadline = (TextView) findViewById(R.id.tvHeadline);
         wvContent = (WebView) findViewById(R.id.wvContent);
@@ -90,24 +90,23 @@ public class DetailActivity extends Activity {
                 Previous();
             }
         });
-
     }
-
+    // Load Item
     private void ShowItem() {
         tvHeadline.setText(item.getTitle());
         wvContent.loadData(item.getContent(), "text/html; charset=UTF-8", null);
     }
-
+    // Open Item in Browser
     private void Open() {
         try {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getUrl()));
             startActivity(intent);
         }
         catch(Exception ex) {
-            Log.e("DetailAct.Open", ex.toString());
+            Log.e("open", ex.toString());
         }
     }
-
+    // Open Share Dialog
     private void Share() {
         try {
             Intent intent = new Intent(Intent.ACTION_SEND);
@@ -116,59 +115,57 @@ public class DetailActivity extends Activity {
             startActivity(Intent.createChooser(intent, "Share"));
         }
         catch(Exception ex) {
-            Log.e("DetailAct.Share", ex.toString());
+            Log.e("share", ex.toString());
         }
     }
-
+    // Show next Item
     private void Previous() {
         try {
             int id = item.getId();
-            if(id > -1) {    // id in Intent gefunden, vorherige id nicht kleiner 0
+            if(id > -1) {
                 Item previous = items.getItem(id - 1);
-                if(previous != null) {    // Vorheriges Element gefunden
+                if(previous != null) {
                     this.item = previous;
                     item.setId(id - 1);
                     ShowItem();
-                    Toast.makeText(getApplicationContext(), "Previous...", Toast.LENGTH_SHORT).show();
                 }
                 else {
                     btPrevious.setEnabled(false);
                     btNext.setEnabled(true);
-                    Log.d("DetailActivity.Previous", "previous element null");
+                    Log.d("previous", "previous element null");
                 }
             }
             else {
                 btPrevious.setEnabled(false);
                 btNext.setEnabled(true);
-                Log.d("DetailActivity.Previous", "id < -1 OR id-1 < -1 (id=" + id + ")");
+                Log.d("previous", "id < -1 OR id-1 < -1 (id=" + id + ")");
             }
         }
         catch (Exception ex) {
-            Log.e("DetailAct.Prev", ex.toString());
+            Log.e("previous", ex.toString());
         }
     }
-
+    // Show next Item
     private void Next() {
         try {
             int id = item.getId();
-            if(id > -1) {    // id in Intent gefunden, vorherige id nicht kleiner 0
+            if(id > -1) {
                 Item next = items.getItem(id + 1);
-                if(next != null) {    // Vorheriges Element gefunden
+                if(next != null) {
                     this.item = next;
                     item.setId(id + 1);
                     ShowItem();
-                    Toast.makeText(getApplicationContext(), "Next...", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Log.d("DetailActivity.Previous", "next element null");
+                    Log.d("next", "next element null");
                 }
             }
             else {
-                Log.d("DetailActivity.Previous", "id < -1 OR id-1 < -1 (id=" + id + ")");
+                Log.d("next", "id < -1 OR id-1 < -1 (id=" + id + ")");
             }
         }
         catch (Exception ex) {
-            Log.e("DetailAct.Prev", ex.toString());
+            Log.e("next", ex.toString());
         }
     }
 }

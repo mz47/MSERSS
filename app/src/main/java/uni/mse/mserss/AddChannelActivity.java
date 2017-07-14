@@ -78,7 +78,7 @@ public class AddChannelActivity extends Activity {
                 startActivity(new Intent(AddChannelActivity.this, OverviewActivity.class));
             }
             else {
-                ShowInvalidTypeDialog();
+                showError();
             }
         }
         catch (Exception ex) {
@@ -89,16 +89,21 @@ public class AddChannelActivity extends Activity {
         }
     }
 
-    private void ShowInvalidTypeDialog() {
-        AlertDialog dialog = new AlertDialog.Builder(this).create();
-        dialog.setTitle("Invalid Type");
-        dialog.setMessage("The entered URL does not refer to a valid RSS feed.");
-        dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
+    private void showError() {
+        try {
+            AlertDialog dialog = new AlertDialog.Builder(this).create();
+            dialog.setTitle("Invalid Type");
+            dialog.setMessage("The entered URL does not refer to a valid RSS feed.");
+            dialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+        }
+        catch (Exception ex) {
+            Log.e("showError", ex.toString());
+        }
     }
 }

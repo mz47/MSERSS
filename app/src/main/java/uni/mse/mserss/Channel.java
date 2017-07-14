@@ -143,10 +143,10 @@ public class Channel {
                 }
             };
             tParseMeta.start();
-            tParseMeta.join();  //TODO qnd
+            tParseMeta.join();
         }
         catch (Exception ex) {
-            Log.e("channel.parseMeta", ex.toString());
+            Log.e("parseMeta", ex.toString());
         }
     }
 
@@ -198,7 +198,7 @@ public class Channel {
             tParse.join();  //TODO qnd
         }
         catch (Exception ex) {
-            Log.e("channel.parse", ex.toString());
+            Log.e("parse", ex.toString());
         }
     }
 

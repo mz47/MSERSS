@@ -32,21 +32,8 @@ public class Item {
     private String url;
     private String title;
     private String content;
-    private Timestamp refreshed;
 
     public Item() {
-        this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
-    }
-
-    public Item(String title) {
-        this.title = title;
-        this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
-    }
-
-    public Item(String URL, String title) {
-        this.url = URL;
-        this.title = title;
-        this.refreshed = new Timestamp(Calendar.getInstance().getTime().getTime());
     }
 
     public int getId() {
@@ -71,14 +58,6 @@ public class Item {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public Timestamp getRefreshed() {
-        return refreshed;
-    }
-
-    public void setRefreshed(Timestamp refreshed) {
-        this.refreshed = refreshed;
     }
 
     public String getTitle() {

@@ -28,12 +28,6 @@ public class ItemsActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_items);
-
-        //IntentFilter statusFilter = new IntentFilter(RssService.BROADCAST_ACTION);
-        //RssStateReceiver receiver = new RssStateReceiver();
-
-        //LocalBroadcastManager.getInstance(this).registerReceiver(receiver, statusFilter);
-
         Initialize();
         FillListView();
     }
@@ -78,9 +72,6 @@ public class ItemsActivity extends FragmentActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Item i = items.getItem(position);
                         Intent details = new Intent(ItemsActivity.this, DetailActivity.class);
-                        //details.putExtra("headline", i.getTitle());
-                        //details.putExtra("content", i.getContent());
-                        //details.putExtra("url", i.getUrl());
                         details.putExtra("channelId", i.getChannelId());
                         details.putExtra("itemId", position);
                         startActivity(details);

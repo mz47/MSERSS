@@ -15,9 +15,7 @@ public class RssServiceReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent refreshIntent = new Intent(context, RssService.class);
         refreshIntent.putExtra("signature", intent.getStringExtra("signature"));
-        //refreshIntent.putExtra("channels", intent.getParcelableExtra("channels"));
         context.startService(refreshIntent);
-
-        Log.d("RssServiceReceiver", "started receiver");
+        Log.d("RssServiceReceiver", "receiver started");
     }
 }

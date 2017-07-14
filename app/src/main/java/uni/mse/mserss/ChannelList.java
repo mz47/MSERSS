@@ -1,8 +1,5 @@
 package uni.mse.mserss;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.util.ArrayList;
 
 /**
@@ -32,17 +29,6 @@ public class ChannelList {
 
     public ArrayList<Channel> getChannels() {
         return channels;
-    }
-
-    public ArrayList<String> toUrlList() {
-        if(channels != null) {
-            ArrayList<String> urls = new ArrayList<>();
-            for(Channel c : channels) {
-                urls.add(c.getUrl());
-            }
-            return urls;
-        }
-        return null;
     }
 
     public ArrayList<String> toTitleList() {

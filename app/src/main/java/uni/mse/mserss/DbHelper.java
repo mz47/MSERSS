@@ -46,51 +46,77 @@ public class DbHelper extends SQLiteOpenHelper {
         db.execSQL(INSERT_CHANNEL_DUMMY4); // Dummy
         db.execSQL(INSERT_CHANNEL_DUMMY5); // Dummy
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL(DROP_TABLE_CHANNEL);
         onCreate(db);
     }
-
-    // Get Channels without linked Colletion
+    // Get all Channels
     public ChannelList getChannels() {
-        SQLiteDatabase database = this.getWritableDatabase();
-        ChannelList channels = new ChannelList();
-        Cursor c = database.rawQuery("SELECT * FROM "+ TABLE_CHANNEL +";", null);
-        while(c.moveToNext()) {
-            Channel channel = new Channel();
-            channel.setId(c.getInt(c.getColumnIndexOrThrow(CHANNEL_ID)));
-            channel.setUrl(c.getString(c.getColumnIndexOrThrow(CHANNEL_URL)));
-            channel.setTitle(c.getString(c.getColumnIndexOrThrow(CHANNEL_TITLE)));
-            channel.setRefresh(c.getInt(c.getColumnIndexOrThrow(CHANNEL_REFRESH)));
-            channels.add(channel);
-        }
-        c.moveToFirst();
-        return channels;
-    }
-
-    public Channel getChannel(int id) {
-        SQLiteDatabase database = this.getWritableDatabase();
-        Channel channel = new Channel();
-        Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_CHANNEL + " WHERE " + CHANNEL_ID + " = " + id + ";", null);
-        cursor.moveToFirst();
-        channel.setId(id);
-        channel.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(CHANNEL_URL)));
-        channel.getItems();
-        return channel;
-    }
-
-    public void addChannel(Channel c) {
-        if(c != null) {
+        try {
             SQLiteDatabase database = this.getWritableDatabase();
-            database.execSQL("INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_REFRESH +", "+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES ("+ c.getRefresh() +", '"+ c.getUrl() +"', '"+ c.getTitle() +"');");
+            ChannelList channels = new ChannelList();
+            Cursor c = database.rawQuery("SELECT * FROM "+ TABLE_CHANNEL +";", null);
+            while(c.moveToNext()) {
+                Channel channel = new Channel();
+                channel.setId(c.getInt(c.getColumnIndexOrThrow(CHANNEL_ID)));
+                channel.setUrl(c.getString(c.getColumnIndexOrThrow(CHANNEL_URL)));
+                channel.setTitle(c.getString(c.getColumnIndexOrThrow(CHANNEL_TITLE)));
+                channel.setRefresh(c.getInt(c.getColumnIndexOrThrow(CHANNEL_REFRESH)));
+                channels.add(channel);
+            }
+            c.moveToFirst();
+            return channels;
         }
-        else {
-            Log.d("DbHelper.addChannel", "c empty");
+        catch (SQLiteException ex) {
+            Log.e("getChannels", ex.toString());
+            return null;
+        }
+        catch (Exception ex) {
+            Log.e("getChannels", ex.toString());
+            return null;
         }
     }
-
+    // Get specific Channel
+    public Channel getChannel(int id) {
+        try {
+            SQLiteDatabase database = this.getWritableDatabase();
+            Channel channel = new Channel();
+            Cursor cursor = database.rawQuery("SELECT * FROM " + TABLE_CHANNEL + " WHERE " + CHANNEL_ID + " = " + id + ";", null);
+            cursor.moveToFirst();
+            channel.setId(id);
+            channel.setUrl(cursor.getString(cursor.getColumnIndexOrThrow(CHANNEL_URL)));
+            channel.getItems();
+            return channel;
+        }
+        catch (SQLiteException ex) {
+            Log.e("getChannel", ex.toString());
+            return null;
+        }
+        catch (Exception ex) {
+            Log.e("getChannel", ex.toString());
+            return null;
+        }
+    }
+    // Add new Channel to Database
+    public void addChannel(Channel c) {
+        try {
+            if(c != null) {
+                SQLiteDatabase database = this.getWritableDatabase();
+                database.execSQL("INSERT INTO "+ TABLE_CHANNEL +" ("+ CHANNEL_REFRESH +", "+ CHANNEL_URL +", "+ CHANNEL_TITLE +") VALUES ("+ c.getRefresh() +", '"+ c.getUrl() +"', '"+ c.getTitle() +"');");
+            }
+            else {
+                Log.d("addChannel", "c empty");
+            }
+        }
+        catch (SQLiteException ex) {
+            Log.e("addChannel", ex.toString());
+        }
+        catch (Exception ex) {
+            Log.e("addChannel", ex.toString());
+        }
+    }
+    // Remove Channel from Database
     public void removeChannel(int id) {
         try {
             if(id >= 0) {
